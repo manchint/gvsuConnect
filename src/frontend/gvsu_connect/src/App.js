@@ -4,7 +4,9 @@ import './App.css';
 
 
 // Importing Pages
-import Login from './pages/Login/Login'
+import Login from './pages/Login/Login';
+import Signup from './pages/Signup/signup';
+import Home from './pages/Home/Home';
 
 function App() {
   return (
@@ -12,6 +14,9 @@ function App() {
       <Router>
         <Routes >
           <Route path = "/" element = {<Login />} />
+          <Route path = "/login" element = {<Login />} />
+          <Route path = "/signup" element = {<Signup />}/>
+          <Route path = "/home" element = {<Home />}/>
           {/* <Route path = "/login" element = {<Login />}/>
           <Route path = "/signup" element = {<Signup />}/>
           <Route path = "/publish" element = {<PublishRecipe />}/>

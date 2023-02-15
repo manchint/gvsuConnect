@@ -3,8 +3,8 @@ DROP SCHEMA `gvsuConnect`;
 CREATE SCHEMA `gvsuConnect` ;
 
 -- TABLES
-drop table if exists users;
-create table users (
+drop table if exists `gvsuConnect`.users;
+create table `gvsuConnect`.users (
 	username varchar(10) primary key,
     fname varchar(20),
     lname varchar(20),
@@ -13,14 +13,14 @@ create table users (
     profile_pic Binary
 );
 
-drop table if exists posts;
-create table posts (
+drop table if exists `gvsuConnect`.posts;
+create table `gvsuConnect`.posts (
 	post_Id int primary key auto_increment,
     post_msg varchar(500)
 );
 
-drop table if exists marketplace;
-create table marketplace (
+drop table if exists `gvsuConnect`.marketplace;
+create table `gvsuConnect`.marketplace (
 	item_Id int primary  key auto_increment,
     username varchar(10),
     item_name varchar(50),
@@ -28,8 +28,8 @@ create table marketplace (
     foreign key (username) references users(username)
 );
 
-drop table if exists rides;
-create table rides (
+drop table if exists `gvsuConnect`.rides;
+create table `gvsuConnect`.rides (
 	ride_Id int primary key auto_increment,
     username varchar(10),
     ride_from varchar(10),
@@ -38,7 +38,7 @@ create table rides (
     foreign key (username) references users(username)
 );
 
-drop table if exists accommodation;
+drop table if exists `gvsuConnect`.accommodation;
 create table accommodation (
 	acc_ID int primary key auto_increment,
     username varchar(10),
@@ -48,8 +48,8 @@ create table accommodation (
     foreign key (username) references users(username)
 );
 
-drop table if exists place_to_visit;
-create table place_to_visit (
+drop table if exists `gvsuConnect`.place_to_visit;
+create table `gvsuConnect`.place_to_visit (
 	p_Id int primary key auto_increment,
     username varchar(10),
     details varchar(20),
@@ -58,29 +58,29 @@ create table place_to_visit (
     foreign key (username) references users(username)
 );
 
-drop table if exists links;
-create table links (
+drop table if exists `gvsuConnect`.links;
+create table `gvsuConnect`.links (
 	URL varchar(100) primary key,
     link_msg varchar(20)
 );
 
-drop table if exists user_groups;
-create table user_groups (
+drop table if exists `gvsuConnect`.user_groups;
+create table `gvsuConnect`.user_groups (
 	group_Id int primary key auto_increment,
     name varchar(50),
     group_desc varchar(100)
 );
 
-drop table if exists group_members;
-create table group_members (
+drop table if exists `gvsuConnect`.group_members;
+create table `gvsuConnect`.group_members (
 	group_Id int,
     username varchar(10),
 	foreign key (group_Id) references user_groups(group_Id),
 	foreign key (username) references users(username)
 );
 
-drop table if exists professor;
-create table professor (
+drop table if exists `gvsuConnect`.professor;
+create table `gvsuConnect`.professor (
 	email varchar(35) primary key,
     dept varchar(25),
     phone varchar(17),
@@ -88,8 +88,8 @@ create table professor (
     office varchar(35)
 );
 
-drop table if exists class;
-create table class (
+drop table if exists `gvsuConnect`.class;
+create table `gvsuConnect`.class (
 	course_number varchar(8),
     email varchar(35),
     semester varchar(20),
@@ -98,3 +98,8 @@ create table class (
 	foreign key (email) references professor(email),
     PRIMARY KEY (course_number, semester, class_year)
 )
+
+-- ONLY ISSUES FOR NODE JS
+-- ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Teju@2411';
+
+-- flush privileges;

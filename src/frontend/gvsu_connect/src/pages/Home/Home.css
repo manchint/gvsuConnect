@@ -1,0 +1,14 @@
+.header {
+    background-color: rgb(131, 189, 239);
+    height: 60px;
+}
+
+.header-menu {
+    color: white;
+    font-weight: bold;
+    background-color: rgb(131, 189, 239);
+    border: none;
+    align-items: center;
+    font-size: 15px;
+    padding-top: 23px;
+}

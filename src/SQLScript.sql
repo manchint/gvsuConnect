@@ -10,7 +10,7 @@ create table `gvsuConnect`.users (
     lname varchar(20),
     email varchar(50),
     pass varchar(200),
-    profile_pic Binary
+    profile_pic varchar(20)
 );
 
 drop table if exists `gvsuConnect`.posts;
@@ -39,7 +39,7 @@ create table `gvsuConnect`.rides (
 );
 
 drop table if exists `gvsuConnect`.accommodation;
-create table accommodation (
+create table `gvsuConnect`.accommodation (
 	acc_ID int primary key auto_increment,
     username varchar(10),
     details varchar(20),

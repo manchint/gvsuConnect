@@ -7,6 +7,7 @@ import './App.css';
 import Login from './pages/Login/Login';
 import Signup from './pages/Signup/signup';
 import Home from './pages/Home/Home';
+import Professors from './pages/Professors/Professors';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path = "/login" element = {<Login />} />
           <Route path = "/signup" element = {<Signup />}/>
           <Route path = "/home" element = {<Home />}/>
+          <Route path = "/professors" element = {<Professors />}/>
           {/* <Route path = "/login" element = {<Login />}/>
           <Route path = "/signup" element = {<Signup />}/>
           <Route path = "/publish" element = {<PublishRecipe />}/>

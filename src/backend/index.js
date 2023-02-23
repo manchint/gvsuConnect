@@ -2,6 +2,8 @@
 import express from "express";
 import bodyParser from "body-parser";
 import routes from "./routes/routes.js";
+import cors from "cors";
+// const cors = require('cors');
 
 const port = 3001;
 const app = express();
@@ -14,7 +16,7 @@ app.use(
 		extended: true,
 	})
 );
-
+app.use(cors());
 routes(app);
 
 const server = app.listen(port, (error) => {

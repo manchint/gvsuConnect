@@ -30,10 +30,6 @@ const ExpandMore = styled((props) => {
 export default function Post() {
   const [expanded, setExpanded] = React.useState(false);
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
-
   return (
     <Card sx={{ maxWidth: 345, margin: '20px' }}>
       <CardHeader
@@ -64,7 +60,8 @@ export default function Post() {
         </Typography>
       </CardContent>
       <Typography variant="body2" color="text.secondary" style={{marginLeft:'10px'}}><strong>Comments</strong></Typography>
-      <Comment></Comment>
+      <Comment ></Comment>
+      <input style={{margin: '20px', width: '-webkit-fill-available'}} type = "text" placeholder='Click Enter to add comment' onKeyDown={(e) => {if(e.key == 'Enter') {console.log("entered key")}}}/>
       <CardActions disableSpacing>
         {/* <IconButton aria-label="add to favorites">
           <FavoriteIcon />

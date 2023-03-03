@@ -1,17 +1,46 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import Header from '../../components/Header';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 export default function Professors() {
+  const [selectedProf, setSelectedProf] = useState('')
   return (
       <div>
+        <Header />
         <Autocomplete
         disablePortal
         id="combo-box-demo"
         options={top100Films}
-        sx={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="Movie" />}
+        sx={{ width: 500, marginTop:'100px', marginLeft: '30%' }}
+        onChange={(event, value) => setSelectedProf(value)}
+        renderInput={(params) => <TextField {...params} label="Search by Professor name" />}
         />
+        {selectedProf && <div style={{margin: '25px 20%'}}>
+          <Card sx={{ maxWidth: 600 }}>
+            <CardContent>
+              <Typography variant='h3'  gutterBottom style={{width: 'max-content'}}>
+                {selectedProf.label}
+              </Typography>
+              <Typography variant="h4" component="div">
+              Heading
+              </Typography>
+              <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                describes the heading
+              </Typography>
+              <Typography variant="body1">
+                Card content
+                <br />
+                {'"describes the content"'}
+              </Typography>
+            </CardContent>
+          </Card>
+    </div>}
     </div>
   );
 }

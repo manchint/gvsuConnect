@@ -8,9 +8,11 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
+import { useNavigate } from 'react-router-dom';
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  let navigate = useNavigate();
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -88,7 +90,7 @@ export default function AccountMenu() {
           </ListItemIcon>
           Settings
         </MenuItem> */}
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={() => navigate('/login')}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

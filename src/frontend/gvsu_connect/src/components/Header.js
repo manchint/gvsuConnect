@@ -14,6 +14,7 @@ function Header(props) {
                     <button className='header-menu' onClick={() => navigate('/home')}>Home</button>
                     <button className='header-menu' >Places To Visit</button>
                     <button className='header-menu' onClick={() => navigate('/professors')}>Professors</button>
+                    <button className='header-menu' onClick={() => navigate('/accommodation')}>Accommodation</button>
                     <button className='header-menu'>Home</button>
                     <AccountMenu></AccountMenu>
                 </div>   

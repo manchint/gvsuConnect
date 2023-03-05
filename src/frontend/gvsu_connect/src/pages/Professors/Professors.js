@@ -22,7 +22,7 @@ export default function Professors() {
         renderInput={(params) => <TextField {...params} label="Search by Professor name" />}
         />
         {selectedProf && <div style={{margin: '25px 20%'}}>
-          <Card sx={{ maxWidth: 600 }}>
+          <center><Card sx={{ maxWidth: 600 }}>
             <CardContent>
               <Typography variant='h3'  gutterBottom style={{width: 'max-content'}}>
                 {selectedProf.label}
@@ -40,6 +40,7 @@ export default function Professors() {
               </Typography>
             </CardContent>
           </Card>
+          </center>
     </div>}
     </div>
   );

@@ -6,6 +6,7 @@ import AccountMenu from '../../components/AccountMenu';
 import Post from '../../components/Post';
 import Header from '../../components/Header';
 import RecentChat from '../../components/RecentChat';
+import Chat from '../Chat/Chat';
 function Home(props) {
     let navigate = useNavigate();
     return (
@@ -29,6 +30,7 @@ function Home(props) {
                         <RecentChat />
                     </div>
                 </div>
+                <Chat />
         </div>
     )
 }

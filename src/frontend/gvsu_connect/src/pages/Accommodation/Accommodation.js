@@ -1,95 +1,35 @@
 import React from 'react';
+import { Carousel } from 'react-bootstrap';
+// import Image1 from './images/image1.jpg';
+// import Image2 from './images/image2.jpg';
+// import Image3 from './images/image3.jpg';
 
-import './Accommodation.css';
-
-var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-class Carousel extends React.Component {
-    
-    constructor(props) {
-        super(props)
-        this.state = {
-            items: this.props.items,
-            active: this.props.active,
-            direction: ''
-        }
-        this.rightClick = this.moveRight.bind(this)
-        this.leftClick = this.moveLeft.bind(this)
-    }
-
-    generateItems() {
-        var items = []
-        var level
-        console.log(this.state.active)
-        for (var i = this.state.active - 2; i < this.state.active + 3; i++) {
-            var index = i
-            if (i < 0) {
-                index = this.state.items.length + i
-            } else if (i >= this.state.items.length) {
-                index = i % this.state.items.length
-            }
-            level = this.state.active - i
-            items.push(<Item key={index} id={this.state.items[index]} level={level} />)
-        }
-        return items
-    }
-    
-    moveLeft() {
-        var newActive = this.state.active
-        newActive--
-        this.setState({
-            active: newActive < 0 ? this.state.items.length - 1 : newActive,
-            direction: 'left'
-        })
-    }
-    
-    moveRight() {
-        var newActive = this.state.active
-        this.setState({
-            active: (newActive + 1) % this.state.items.length,
-            direction: 'right'
-        })
-    }
-    
-    render() {
-        return(
-            <div id="carousel" className="noselect">
-                <div className="arrow arrow-left" onClick={this.leftClick}><i className="fi-arrow-left"></i></div>
-                <ReactCSSTransitionGroup 
-                    transitionName={this.state.direction}>
-                    {this.generateItems()}
-                </ReactCSSTransitionGroup>
-                <div className="arrow arrow-right" onClick={this.rightClick}><i className="fi-arrow-right"></i></div>
-            </div>
-        )
-    }
-}
-
-class Item extends React.Component {
-    
-    constructor(props) {
-        super(props)
-        this.state = {
-            level: this.props.level
-        }
-    }
-    
-    render() {
-        const className = 'item level' + this.props.level
-        return(
-            <div className={className}>
-                {this.props.id}
-            </div>
-        )
-    }
-}
-
-var items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-// ReactDOM.render(<Carousel items={items} active={0}/>, document.getElementById('app'))
-
-function Accommodation() {
-  return(
-    <Carousel items={items} active={0}/>
-  )
-}
+const Accommodation = () => {
+  return (
+    <Carousel>
+      <Carousel.Item>
+        <img className="d-block w-100" src='https://repository-images.githubusercontent.com/260096455/47f1b200-8b2e-11ea-8fa1-ab106189aeb0' alt="First slide" />
+        <Carousel.Caption>
+          <h3>First slide label</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </Carousel.Caption>
+      </Carousel.Item>
+      <Carousel.Item>
+        <img className="d-block w-100" src='https://repository-images.githubusercontent.com/260096455/47f1b200-8b2e-11ea-8fa1-ab106189aeb0' alt="Second slide" />
+        <Carousel.Caption>
+          <h3>Second slide label</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </Carousel.Caption>
+      </Carousel.Item>
+      <Carousel.Item>
+        <img className="d-block w-100" src='https://repository-images.githubusercontent.com/260096455/47f1b200-8b2e-11ea-8fa1-ab106189aeb0' alt="Third slide" />
+        <Carousel.Caption>
+          <h3>Third slide label</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </Carousel.Caption>
+      </Carousel.Item>
+    </Carousel>
+  );
+};
 
 export default Accommodation;

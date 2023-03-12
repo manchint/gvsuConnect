@@ -35,3 +35,9 @@
     margin: 5px 15px 15px 15px;
     color: blue;
 }
+
+.bg-image {
+    background-image: url("https://www.shutterstock.com/image-photo/group-children-hands-together-joining-260nw-1660313170.jpg");
+    background-size: cover;
+    height: 100vh;
+  }

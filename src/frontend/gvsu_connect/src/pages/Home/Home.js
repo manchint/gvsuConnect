@@ -5,6 +5,7 @@ import './Home.css';
 import AccountMenu from '../../components/AccountMenu';
 import Post from '../../components/Post';
 import Header from '../../components/Header';
+import RecentChat from '../../components/RecentChat';
 function Home(props) {
     let navigate = useNavigate();
     return (
@@ -19,10 +20,13 @@ function Home(props) {
                 </div>   
             </div> */}
             <Header />
-            <div style={{backgroundColor:'grey', opacity:'50%', overflowY:'scroll', marginTop:'60px'}}>
+            <div style={{backgroundColor:'grey', opacity:'50%', overflowY:'scroll', marginTop:'60px', display: 'flex'}}>
                     <div style={{marginLeft: '35%', marginBottom: '30px'}}>
                         <Post></Post>
                         <Post></Post>
+                    </div>
+                    <div style={{marginLeft: '35%', marginBottom: '30px'}}>
+                        <RecentChat />
                     </div>
                 </div>
         </div>

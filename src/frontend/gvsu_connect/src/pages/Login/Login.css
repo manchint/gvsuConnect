@@ -11,6 +11,12 @@
     background-color: aliceblue;
 }
 
+.bg-image {
+    background-image: url("https://www.shutterstock.com/image-photo/group-children-hands-together-joining-260nw-1660313170.jpg");
+    background-size: cover;
+    height: 100vh;
+  }
+
 .input {
     width: fit-content;
     margin: 20px 50px;

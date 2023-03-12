@@ -5,6 +5,7 @@ import './signup.css';
 
 function Signup(props) {
     return (
+      <div className="bg-image">
      <div className="container">
         <text className="text"><b>SIGNUP</b></text>
         <div className='input'>
@@ -30,6 +31,7 @@ function Signup(props) {
         <button className='primary-btn'>SIGN UP</button>
         <text className='account'>Already a user?</text>
         <a className='create' href='http://localhost:3000/login'>Login</a>
+     </div>
      </div>
     )
  }

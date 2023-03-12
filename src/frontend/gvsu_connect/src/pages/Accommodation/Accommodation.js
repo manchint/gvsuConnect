@@ -1,58 +1,95 @@
-import React from "react";
-import Header from "../../components/Header";
-import { Carousel } from 'react-material-ui-carousel';
-import { Paper, Button } from '@material-ui/core';
+import React from 'react';
 
+import './Accommodation.css';
 
-function CarouselItem(props) {
-    return (
-      <Paper>
-        <img src={props.item.imageUrl} alt={props.item.title} />
-        <h2>{props.item.title}</h2>
-        <p>{props.item.description}</p>
-        <Button variant="contained" color="primary">Learn More</Button>
-      </Paper>
-    );
-  }
-   
-
-function Accommodation() {
-    const items = [
-        {
-          title: "Item 1",
-          description: "Description for Item 1",
-          imageUrl: "https://placeimg.com/640/480/animals"
-        },
-        {
-          title: "Item 2",
-          description: "Description for Item 2",
-          imageUrl: "https://placeimg.com/640/480/architecture"
-        },
-        {
-          title: "Item 3",
-          description: "Description for Item 3",
-          imageUrl: "https://placeimg.com/640/480/nature"
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+class Carousel extends React.Component {
+    
+    constructor(props) {
+        super(props)
+        this.state = {
+            items: this.props.items,
+            active: this.props.active,
+            direction: ''
         }
-      ];
-    const accom = () => {
-        return (
-            <div>
+        this.rightClick = this.moveRight.bind(this)
+        this.leftClick = this.moveLeft.bind(this)
+    }
 
+    generateItems() {
+        var items = []
+        var level
+        console.log(this.state.active)
+        for (var i = this.state.active - 2; i < this.state.active + 3; i++) {
+            var index = i
+            if (i < 0) {
+                index = this.state.items.length + i
+            } else if (i >= this.state.items.length) {
+                index = i % this.state.items.length
+            }
+            level = this.state.active - i
+            items.push(<Item key={index} id={this.state.items[index]} level={level} />)
+        }
+        return items
+    }
+    
+    moveLeft() {
+        var newActive = this.state.active
+        newActive--
+        this.setState({
+            active: newActive < 0 ? this.state.items.length - 1 : newActive,
+            direction: 'left'
+        })
+    }
+    
+    moveRight() {
+        var newActive = this.state.active
+        this.setState({
+            active: (newActive + 1) % this.state.items.length,
+            direction: 'right'
+        })
+    }
+    
+    render() {
+        return(
+            <div id="carousel" className="noselect">
+                <div className="arrow arrow-left" onClick={this.leftClick}><i className="fi-arrow-left"></i></div>
+                <ReactCSSTransitionGroup 
+                    transitionName={this.state.direction}>
+                    {this.generateItems()}
+                </ReactCSSTransitionGroup>
+                <div className="arrow arrow-right" onClick={this.rightClick}><i className="fi-arrow-right"></i></div>
             </div>
         )
     }
+}
+
+class Item extends React.Component {
     
-        
-    return (
-        <div>
-            <Header />
-            <Carousel>
-                {items.map((item, index) => (
-                    <CarouselItem key={index} item={item} />
-                ))}
-            </Carousel>
-        </div>
-    )
+    constructor(props) {
+        super(props)
+        this.state = {
+            level: this.props.level
+        }
+    }
+    
+    render() {
+        const className = 'item level' + this.props.level
+        return(
+            <div className={className}>
+                {this.props.id}
+            </div>
+        )
+    }
+}
+
+var items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+// ReactDOM.render(<Carousel items={items} active={0}/>, document.getElementById('app'))
+
+function Accommodation() {
+  return(
+    <Carousel items={items} active={0}/>
+  )
 }
 
 export default Accommodation;

@@ -1,24 +1,41 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 
-import AccountMenu from './AccountMenu';
 function Header(props) {
     let navigate = useNavigate();
     return (
-        <div className='header' style={{backgroundColor: '#83bdef',
-            height: '60px',
-            position: 'fixed',
-            top: '0px',
-            width: '100%'}}>
-                <div style={{marginLeft : '100px'}}>
-                    <button className='header-menu' onClick={() => navigate('/home')}>Home</button>
-                    <button className='header-menu' >Places To Visit</button>
-                    <button className='header-menu' onClick={() => navigate('/professors')}>Professors</button>
-                    <button className='header-menu' onClick={() => navigate('/accommodation')}>Accommodation</button>
-                    <button className='header-menu'>Home</button>
-                    <AccountMenu></AccountMenu>
-                </div>   
-            </div>
+        <>
+        
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+      <Container>
+        <Navbar.Brand href="#home">Logo</Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link href="#features">Home</Nav.Link>
+            <Nav.Link href="#pricing">Professors</Nav.Link>
+            <Nav.Link href="#pricing">Accommodation</Nav.Link>
+          </Nav>
+          <Nav>
+          <NavDropdown title="Name" id="collasible-nav-dropdown">
+              <NavDropdown.Item href="#action/3.1">Profile</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.2">
+                Logout
+              </NavDropdown.Item>
+             
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+        
+        
+        
+        </>
     )
 }
 

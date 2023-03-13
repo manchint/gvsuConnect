@@ -1,14 +1,14 @@
 import { BrowserRouter as Router,Routes, Route } from 'react-router-dom';
 import React from 'react';
 import './App.css';
-
+import './index.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Importing Pages
 import Login from './pages/Login/Login';
-import Signup from './pages/Signup/signup';
-import Home from './pages/Home/Home';
-import Professors from './pages/Professors/Professors';
+import Signup from './pages/Signup/Signup';
 import Accommodation from './pages/Accommodation/Accommodation';
+import Home from './pages/Home/Home';
 
 function App() {
   return (
@@ -18,13 +18,8 @@ function App() {
           <Route path = "/" element = {<Login />} />
           <Route path = "/login" element = {<Login />} />
           <Route path = "/signup" element = {<Signup />}/>
-          <Route path = "/home" element = {<Home />}/>
-          <Route path = "/professors" element = {<Professors />}/>
           <Route path = "/accommodation" element = {<Accommodation />} />
-          {/* <Route path = "/login" element = {<Login />}/>
-          <Route path = "/signup" element = {<Signup />}/>
-          <Route path = "/publish" element = {<PublishRecipe />}/>
-          <Route path = "/viewdetails" element = {<DetailsView />}/> */}
+          <Route path = "/home" element = {<Home />}/>
         </Routes>
       </Router>
     </div>

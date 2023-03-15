@@ -6,6 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
+import Chat from '../Chat/Chat';
 function Home(props) {
     let navigate = useNavigate();
     return (
@@ -17,6 +18,10 @@ function Home(props) {
                 <Row>
                     <Col sm={8}>
                         <div className='shadow p-3  bg-white rounded'>
+
+
+                       
+
                         <div class="d-flex mt-3 mb-4">
                             <div className='media me-3 shadow'>
                                 <img class="mr-3" src="../profile.jpg" alt="Generic placeholder image" />
@@ -26,7 +31,6 @@ function Home(props) {
                                 Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
                             </div>
                         </div>
-                        
 
 
                         <Form>
@@ -40,11 +44,13 @@ function Home(props) {
 
 
                     </Col>
+                    <Col>
+                        <Chat />
+                    </Col>
                     <Col sm={4}>
-                    <div className='shadow p-3  bg-white rounded'>
-                        sm=4
-                        </div>
-                        
+                        <div className='shadow p-3  bg-white rounded'>sm=4</div>
+                        <div className='shadow p-3  bg-white rounded'>sm=4</div>
+                        <div className='shadow p-3  bg-white rounded'>sm=4</div>
                         </Col>
                 </Row>
             </Container>

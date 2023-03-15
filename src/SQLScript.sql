@@ -16,7 +16,9 @@ create table `gvsuConnect`.users (
 drop table if exists `gvsuConnect`.posts;
 create table `gvsuConnect`.posts (
 	post_Id int primary key auto_increment,
-    post_msg varchar(500)
+    post_msg varchar(500),
+    username varchar(10),
+    foreign key (username) references users(username)
 );
 
 drop table if exists `gvsuConnect`.marketplace;
@@ -97,7 +99,16 @@ create table `gvsuConnect`.class (
     class_info varchar(30),
 	foreign key (email) references professor(email),
     PRIMARY KEY (course_number, semester, class_year)
-)
+);
+
+drop table if exists `gvsuConnect`.messages;
+create table `gvsuConnect`.messages (
+	from_user varchar(10),
+    to_user varchar(10),
+    msg varchar(30),
+	foreign key (from_user) references users(username),
+	foreign key (to_user) references users(username)
+);
 
 -- ONLY ISSUES FOR NODE JS
 -- ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Teju@2411';

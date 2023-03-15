@@ -1,11 +1,27 @@
 import React from 'react';
 import { Link} from 'react-router-dom';
 
-
+import cryptoJs from 'crypto-js';
 function Login() {
   
-  
- 
+    let navigate = useNavigate();
+
+   const [email, setEmail] = useState();
+   const [password, setPassword] = useState();
+
+   const onClickLogin = () => {
+        var ciphertext = CryptoJS.AES.encrypt(password, 'my password').toString();
+        navigate('/home');
+      // axios.get('http://localhost:3001/login',{
+      //       "username": email,
+      //       "password": password
+      //   }).then (res => {
+      //       console.log(res)
+      //       navigate('/home');
+      //   });
+
+   }
+    
     return (
         <>
           

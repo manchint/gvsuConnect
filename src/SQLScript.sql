@@ -106,9 +106,31 @@ create table `gvsuConnect`.messages (
 	from_user varchar(10),
     to_user varchar(10),
     msg varchar(30),
+    ts DATETIME default CURRENT_TIMESTAMP,
 	foreign key (from_user) references users(username),
 	foreign key (to_user) references users(username)
 );
+
+drop table if exists `gvsuConnect`.comments;
+create table `gvsuConnect`.comments (
+	post_id int,
+    msg varchar(30),
+    ts DATETIME default CURRENT_TIMESTAMP
+);
+
+CREATE TABLE posts_serie (
+  id VARCHAR(7) NOT NULL PRIMARY KEY DEFAULT '0'
+  );
+  
+DELIMITER $$
+CREATE TRIGGER tg_posts_insert
+BEFORE INSERT ON `gvsuConnect`.posts
+FOR EACH ROW
+BEGIN
+  INSERT INTO table1_seq VALUES (NULL);
+  SET NEW.id = CONCAT('ABC', LPAD(LAST_INSERT_ID(), 3, '0'));
+END$$
+DELIMITER ;
 
 -- ONLY ISSUES FOR NODE JS
 -- ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Teju@2411';

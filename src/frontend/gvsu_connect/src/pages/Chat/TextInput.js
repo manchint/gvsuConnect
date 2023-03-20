@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField';
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import SendIcon from '@material-ui/icons/Send';
 import Button from '@material-ui/core/Button';
-
+import axios from 'axios';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,18 +23,42 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 
-export const TextInput = () => {
+
+export const TextInput = (props) => {
     const classes = useStyles();
+    const [msg, setMsg] = useState();
+    
+    var headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+    const sendMessage = (e) => {
+        var data = {
+            'from' : props.from,
+            'to' : props.to,
+            'msg' : msg
+    
+        }
+        setMsg('');
+        e.preventDefault();
+        axios.post('http://localhost:3001/sendmessage',data, headers).then (res => {
+            //if anything needed to be done
+        });
+    }
     return (
         <>
             <form className={classes.wrapForm}  noValidate autoComplete="off">
             <TextField
                 id="standard-text"
-                label="メッセージを入力"
+                label="Type your Message Here"
                 className={classes.wrapText}
                 //margin="normal"
+                onChange = {(e) => setMsg(e.target.value)}
+                value={msg}
             />
-            <Button variant="contained" color="primary" className={classes.button}>
+            <Button variant="contained" color="primary" className={classes.button} 
+                onClick={(e) => sendMessage(e)}>
                 <SendIcon />
             </Button>
             </form>

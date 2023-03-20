@@ -1,27 +1,27 @@
 import {executeQuery} from '../common.js'
 
 const userModel = {}
+import cryptoJs from 'crypto-js';
 
-
-var onFetchUsernameSuccessCallBack =  function(data, password) {
-    var bytes  = CryptoJS.AES.decrypt(password, 'my password');
-    var originalText = bytes.toString(CryptoJS.enc.Utf8);
+const onFetchUsernameSuccessCallBack =  function(data, password, successCallback) {
+    console.log(JSON.stringify(data))
+    //var originalText  = cryptoJs.AES.decrypt(password, 'mypassword').toString;
+    //console.log(originalText, "--", password)
     if(data.length === 0) {
         var response = {msg: "User not found"}
     }
-    else if(data[0].password != originalText) {
-        var response = {msg: "Login failed"}
+    else if(data[0].password != password) {
+        successCallback({msg: "Login failed"})
     } else {
-        var response = {status: "Success"}
+        successCallback({status: "Success"})
     }
-    return response;
 }
 
 
 
 userModel.verifyLogin = function(handlers) {
     const query = "SELECT * FROM users where username = '" + handlers.username + "'";
-    executeQuery(query, onFetchUsernameSuccessCallBack(handlers.success, handlers.password), handlers.error);
+    executeQuery(query, (data) => onFetchUsernameSuccessCallBack(data, handlers.password, handlers.success), handlers.error);
 }
 
 userModel.addUser = function(handlers) {

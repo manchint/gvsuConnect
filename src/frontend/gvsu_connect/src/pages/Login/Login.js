@@ -1,24 +1,35 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Link} from 'react-router-dom';
 
 import cryptoJs from 'crypto-js';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 function Login() {
   
     let navigate = useNavigate();
+    let emailRef = useRef();
+    let passRef = useRef()
 
-   const [email, setEmail] = useState();
-   const [password, setPassword] = useState();
-
-   const onClickLogin = () => {
-        var ciphertext = CryptoJS.AES.encrypt(password, 'my password').toString();
-        navigate('/home');
-      // axios.get('http://localhost:3001/login',{
-      //       "username": email,
-      //       "password": password
-      //   }).then (res => {
-      //       console.log(res)
-      //       navigate('/home');
-      //   });
+   const onClickLogin = (e) => {
+        e.preventDefault()
+        console.log(passRef)
+        var ciphertext = cryptoJs.AES.encrypt(passRef.current.value, 'mypassword').toString();
+        //navigate('/home');
+        var headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+        var data = {
+            "username": emailRef.current.value,
+            "password": ciphertext
+        }
+        console.log(JSON.stringify(data))
+        axios.post('http://localhost:3001/login',data, headers).then (res => {
+                localStorage.setItem('username', emailRef.current.value)
+                console.log(res)
+                navigate('/home');
+            });
 
    }
     
@@ -36,13 +47,15 @@ function Login() {
 
                             <div className="wrap-input100 validate-input">
                                 
-                                <input className="input100" type="email" name="mail"  placeholder="Email" required />
+                                <input className="input100" name="mail"  placeholder="Username" required 
+                                    ref={emailRef}/>
                                 <span className="focus-input100"></span>
                             </div>
 
                             <div className="wrap-input100 validate-input">
                                 
-                                <input className="input100" type="password" name="psd"  placeholder="Password" required />
+                                <input className="input100" type="password" name="psd"  placeholder="Password" required 
+                                    ref={passRef}/>
                                 <span className="focus-input100"></span>
                             </div>
 
@@ -50,7 +63,7 @@ function Login() {
                             <div className="container-login100-form-btn">
                                 <div className="wrap-login100-form-btn">
                                     <div className="login100-form-bgbtn"></div>
-                                    <button className="login100-form-btn">
+                                    <button className="login100-form-btn" onClick={(e) => onClickLogin(e)}>
                                         SUBMIT
                                     </button>
                                 </div>

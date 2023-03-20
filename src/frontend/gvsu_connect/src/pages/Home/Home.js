@@ -18,10 +18,6 @@ function Home(props) {
                 <Row>
                     <Col sm={8}>
                         <div className='shadow p-3  bg-white rounded'>
-
-
-                       
-
                         <div class="d-flex mt-3 mb-4">
                             <div className='media me-3 shadow'>
                                 <img class="mr-3" src="../profile.jpg" alt="Generic placeholder image" />
@@ -45,7 +41,7 @@ function Home(props) {
 
                     </Col>
                     <Col>
-                        <Chat />
+                        <Chat from="test" to="test1"/>
                     </Col>
                     <Col sm={4}>
                         <div className='shadow p-3  bg-white rounded'>sm=4</div>

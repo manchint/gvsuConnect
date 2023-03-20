@@ -1,5 +1,7 @@
 import userModel from '../models/user.model.js';
-import postsModel from '../models/posts_model.js';
+import postsModel from '../models/posts.model.js';
+import messagesModel from '../models/messages.model.js';
+
 import cryptoJs from 'crypto-js';
 
 const router = (app) => {
@@ -8,32 +10,43 @@ const router = (app) => {
 			message: "Home API",
 		});
 	});
-	app.get("/login", (req, res) => {
+	app.post("/login", (req, res) => {
+		console.log(req.body)
 		userModel.verifyLogin({success:function(data){res.status(200).send(data)},
 								error:function(err){res.send(err)},
-								username: req.body.data.username,
-								password: req.body.data.password
+								username: req.body.username,
+								password: req.body.password
 							});
 	});
 
-	app.get("/signup", (req, res) => {
+	app.post("/signup", (req, res) => {
 		userModel.addUser({success:function(data){res.status(200).send(data)},
 								error:function(err){res.send(err)},
-								username: req.body.data.username,
-								fname: req.body.data.fname,
-								lname: req.body.data.lname,
-								email: req.body.data.email,
-								password: req.body.data.password});
+								username: req.body.username,
+								fname: req.body.fname,
+								lname: req.body.lname,
+								email: req.body.email,
+								password: req.body.password});
 	});
-	app.get("/getposts", (req, res) => {
+	app.post("/getposts", (req, res) => {
 		postsModel.getAllPosts({success:function(data){res.status(200).send(data)},
 								error:function(err){res.send(err)}})
 	});
 
-	app.get("/getposts", (req, res) => {
-		postsModel.getAllPosts({success:function(data){res.status(200).send(data)},
+	app.post("/getmessages", (req, res) => {
+		messagesModel.getAllMessages({success:function(data){res.status(200).send(data)},
 								error:function(err){res.send(err)},
-								user : req.body.data.username
+								from : req.body.from,
+								to : req.body.to
+							})
+	});
+
+	app.post("/sendmessage", (req, res) => {
+		messagesModel.sendMessage({success:function(data){res.status(200).send(data)},
+								error:function(err){res.send(err)},
+								from : req.body.from,
+								to : req.body.to,
+								msg: req.body.msg
 							})
 	});
 };

@@ -30,9 +30,26 @@ const router = (app) => {
 	});
 	app.post("/getposts", (req, res) => {
 		postsModel.getAllPosts({success:function(data){res.status(200).send(data)},
-								error:function(err){res.send(err)}})
+								error:function(err){res.send(err)},
+								category : req.body.category
+							})
 	});
 
+	app.post("/addPost", (req, res) => {
+		postsModel.addPost({success:function(data){res.status(200).send(data)},
+								error:function(err){res.send(err)},
+								username : req.body.username,
+								postMsg : req.body.post_msg,
+								category : req.body.category
+							})
+	});
+
+	app.post("/getComments", (req, res) => {
+		postsModel.getAllComments({success:function(data){res.status(200).send(data)},
+								error:function(err){res.send(err)},
+								post_id : req.body.post_id
+							})
+	});
 	app.post("/getmessages", (req, res) => {
 		messagesModel.getAllMessages({success:function(data){res.status(200).send(data)},
 								error:function(err){res.send(err)},

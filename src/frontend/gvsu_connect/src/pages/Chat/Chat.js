@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 import { MessageLeft, MessageRight } from "./Message";
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+
 import { TextInput } from "./TextInput";
 import axios from 'axios';
 function Chat(props) {
@@ -32,26 +35,30 @@ function Chat(props) {
    // const currentUser = localStorage.getItem('username')
    const currentUser = 'test'
     return(
-        <div className="modal" tabIndex="-1" role="dialog">
-            <div className="modal-dialog" role="document">
-                <div className="modal-content">
-                <div className="modal-header">
-                    <h5 className="modal-title">Test1</h5>
-                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div className="modal-body">
-                    <div>
+       
+        <div
+        className="modal show"
+        style={{ display: 'block', position: 'initial' }}
+        >
+             {messages.length > 0 && 
+        <Modal.Dialog>
+            <Modal.Header closeButton>
+            <Modal.Title>Modal title</Modal.Title>
+            </Modal.Header>
+
+            <Modal.Body>
+                
+                <div>
                         {messages.map(message => {
                             return message.from_user === currentUser ? <MessageRight message = {message.msg}/> : 
                                 <MessageLeft displayName = {message.from_user} message = {message.msg}/>
                         })}
                         <TextInput from={props.from} to={props.to}/>
                     </div>
-                </div>
-            </div>
-        </div>
+                    
+            </Modal.Body>
+        </Modal.Dialog>
+}
         </div>
     )
 }

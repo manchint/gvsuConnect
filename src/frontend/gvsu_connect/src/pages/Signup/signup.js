@@ -23,12 +23,12 @@ function Signup() {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
-            var ciphertext = cryptoJs.AES.encrypt(userDetails.password, 'mypassword').toString();
+            // var ciphertext = cryptoJs.AES.encrypt(userDetails.password, 'mypassword').toString();
             var data = {
                 'fname' : userDetails.fname,
                 'lname' : userDetails.lname,
                 'username' : userDetails.username,
-                'password' : ciphertext,
+                'password' : userDetails.password,
                 'email' : userDetails.email
             }
             axios.post('http://localhost:3001/signup', data, headers).then (res => {

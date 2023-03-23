@@ -18,47 +18,55 @@ create table `gvsuConnect`.posts (
 	post_Id int primary key auto_increment,
     post_msg varchar(500),
     username varchar(10),
-    foreign key (username) references users(username)
-);
-
-drop table if exists `gvsuConnect`.marketplace;
-create table `gvsuConnect`.marketplace (
-	item_Id int primary  key auto_increment,
-    username varchar(10),
-    item_name varchar(50),
-    item_desc varchar(200),
-    foreign key (username) references users(username)
-);
-
-drop table if exists `gvsuConnect`.rides;
-create table `gvsuConnect`.rides (
-	ride_Id int primary key auto_increment,
-    username varchar(10),
     ride_from varchar(10),
     ride_to varchar(10),
     ride_date date,
-    foreign key (username) references users(username)
-);
-
-drop table if exists `gvsuConnect`.accommodation;
-create table `gvsuConnect`.accommodation (
-	acc_ID int primary key auto_increment,
-    username varchar(10),
     details varchar(20),
     location varchar(50),
     price int,
+    category varchar(10),
     foreign key (username) references users(username)
 );
 
-drop table if exists `gvsuConnect`.place_to_visit;
-create table `gvsuConnect`.place_to_visit (
-	p_Id int primary key auto_increment,
-    username varchar(10),
-    details varchar(20),
-    location varchar(50),
-    travel_info varchar(100),
-    foreign key (username) references users(username)
-);
+-- drop table if exists `gvsuConnect`.marketplace;
+-- create table `gvsuConnect`.marketplace (
+-- 	item_Id int primary  key auto_increment,
+--     username varchar(10),
+--     item_name varchar(50),
+--     item_desc varchar(200),
+--     foreign key (username) references users(username)
+-- );
+
+-- drop table if exists `gvsuConnect`.rides;
+-- create table `gvsuConnect`.rides (
+-- 	ride_Id int primary key auto_increment,
+--     username varchar(10),
+--     ride_from varchar(10),
+--     ride_to varchar(10),
+--     ride_date date,
+--     foreign key (username) references users(username)
+-- );
+
+-- drop table if exists `gvsuConnect`.accommodation;
+-- create table `gvsuConnect`.accommodation (
+-- 	acc_ID int primary key auto_increment,
+--     username varchar(10),
+--     details varchar(20),
+--     location varchar(50),
+--     price int,
+--     foreign key (username) references users(username)
+-- );
+
+-- TO BE ADDED
+-- drop table if exists `gvsuConnect`.place_to_visit;
+-- create table `gvsuConnect`.place_to_visit (
+-- 	p_Id int primary key auto_increment,
+--     username varchar(10),
+--     details varchar(20),
+--     location varchar(50),
+--     travel_info varchar(100),
+--     foreign key (username) references users(username)
+-- );
 
 drop table if exists `gvsuConnect`.links;
 create table `gvsuConnect`.links (
@@ -66,20 +74,20 @@ create table `gvsuConnect`.links (
     link_msg varchar(20)
 );
 
-drop table if exists `gvsuConnect`.user_groups;
-create table `gvsuConnect`.user_groups (
-	group_Id int primary key auto_increment,
-    name varchar(50),
-    group_desc varchar(100)
-);
+-- drop table if exists `gvsuConnect`.user_groups;
+-- create table `gvsuConnect`.user_groups (
+-- 	group_Id int primary key auto_increment,
+--     name varchar(50),
+--     group_desc varchar(100)
+-- );
 
-drop table if exists `gvsuConnect`.group_members;
-create table `gvsuConnect`.group_members (
-	group_Id int,
-    username varchar(10),
-	foreign key (group_Id) references user_groups(group_Id),
-	foreign key (username) references users(username)
-);
+-- drop table if exists `gvsuConnect`.group_members;
+-- create table `gvsuConnect`.group_members (
+-- 	group_Id int,
+--     username varchar(10),
+-- 	foreign key (group_Id) references user_groups(group_Id),
+-- 	foreign key (username) references users(username)
+-- );
 
 drop table if exists `gvsuConnect`.professor;
 create table `gvsuConnect`.professor (
@@ -117,20 +125,6 @@ create table `gvsuConnect`.comments (
     msg varchar(30),
     ts DATETIME default CURRENT_TIMESTAMP
 );
-
-CREATE TABLE posts_serie (
-  id VARCHAR(7) NOT NULL PRIMARY KEY DEFAULT '0'
-  );
-  
-DELIMITER $$
-CREATE TRIGGER tg_posts_insert
-BEFORE INSERT ON `gvsuConnect`.posts
-FOR EACH ROW
-BEGIN
-  INSERT INTO table1_seq VALUES (NULL);
-  SET NEW.id = CONCAT('ABC', LPAD(LAST_INSERT_ID(), 3, '0'));
-END$$
-DELIMITER ;
 
 -- ONLY ISSUES FOR NODE JS
 -- ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Teju@2411';

@@ -12,7 +12,6 @@ export function executeQuery(query , success, error){
         connection.query(query,  function(err, rows){
           if(err) error(err);
           else {
-              console.log(rows);
               success(rows)
           }
         });

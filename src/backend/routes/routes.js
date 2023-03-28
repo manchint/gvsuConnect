@@ -11,7 +11,6 @@ const router = (app) => {
 		});
 	});
 	app.post("/login", (req, res) => {
-		console.log(req.body)
 		userModel.verifyLogin({success:function(data){res.status(200).send(data)},
 								error:function(err){res.send(err)},
 								username: req.body.username,
@@ -28,7 +27,7 @@ const router = (app) => {
 								email: req.body.email,
 								password: req.body.password});
 	});
-	app.post("/getposts", (req, res) => {
+	app.post("/getposts", (req, res) => {		
 		postsModel.getAllPosts({success:function(data){res.status(200).send(data)},
 								error:function(err){res.send(err)},
 								category : req.body.category
@@ -40,6 +39,7 @@ const router = (app) => {
 								error:function(err){res.send(err)},
 								username : req.body.username,
 								postMsg : req.body.post_msg,
+								images : req.body.images,
 								category : req.body.category
 							})
 	});

@@ -8,7 +8,7 @@ import { TextInput } from "./TextInput";
 import axios from 'axios';
 function Chat(props) {
     var data = {
-        'from' : props.from,
+        'from' : localStorage.getItem('username'),
         'to' : props.to
     }
     var headers = {
@@ -31,16 +31,14 @@ function Chat(props) {
             //navigate('/home');
             setMessages(res.data)
         });
-    }, 5000)
-   // const currentUser = localStorage.getItem('username')
-   const currentUser = 'test'
+    }, 50000)
+    const currentUser = localStorage.getItem('username');
     return(
        
         <div
         className="modal show"
         style={{ display: 'block', position: 'initial' }}
         >
-             {messages.length > 0 && 
         <Modal.Dialog>
             <Modal.Header closeButton>
             <Modal.Title>Modal title</Modal.Title>
@@ -49,7 +47,7 @@ function Chat(props) {
             <Modal.Body>
                 
                 <div>
-                        {messages.map(message => {
+                        {messages.length > 0  &&  messages.map(message => {
                             return message.from_user === currentUser ? <MessageRight message = {message.msg}/> : 
                                 <MessageLeft displayName = {message.from_user} message = {message.msg}/>
                         })}
@@ -58,7 +56,6 @@ function Chat(props) {
                     
             </Modal.Body>
         </Modal.Dialog>
-}
         </div>
     )
 }

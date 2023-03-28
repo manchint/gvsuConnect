@@ -4,9 +4,7 @@ const userModel = {}
 import cryptoJs from 'crypto-js';
 
 const onFetchUsernameSuccessCallBack =  function(data, password, successCallback) {
-    console.log(JSON.stringify(data))
     //var originalText  = cryptoJs.AES.decrypt(password, 'mypassword').toString;
-    //console.log(originalText, "--", password)
     if(data.length === 0) {
         var response = {msg: "User not found"}
     }

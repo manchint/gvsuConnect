@@ -28,6 +28,13 @@ create table `gvsuConnect`.posts (
     foreign key (username) references users(username)
 );
 
+create table `gvsuConnect`.images (
+	image_id int primary key auto_increment,
+    imageData blob,
+    post_id int,
+    foreign key (post_id) references posts(post_Id)
+)
+
 -- drop table if exists `gvsuConnect`.marketplace;
 -- create table `gvsuConnect`.marketplace (
 -- 	item_Id int primary  key auto_increment,
@@ -123,7 +130,10 @@ drop table if exists `gvsuConnect`.comments;
 create table `gvsuConnect`.comments (
 	post_id int,
     msg varchar(30),
-    ts DATETIME default CURRENT_TIMESTAMP
+    comment_user varchar(10),
+    ts DATETIME default CURRENT_TIMESTAMP,
+    foreign key (comment_user) references users(username),
+    foreign key (post_id) references posts(post_Id)
 );
 
 -- ONLY ISSUES FOR NODE JS

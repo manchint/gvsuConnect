@@ -7,11 +7,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Chat from "../Chat/Chat";
-import Accommodation from "../Corousel/Corousel";
+import Corousel from "../Corousel/Corousel";
 import { Button } from "react-bootstrap";
 import axios from "axios";
-import { AddComment } from "@material-ui/icons";
-function Home(props) {
+function Accommodation(props) {
   let navigate = useNavigate();
   const [postMsg, setPostMsg] = useState("");
   const [postimages, setPostImages] = useState([]);
@@ -31,7 +30,7 @@ function Home(props) {
 
   useEffect(() => {
     var data = {
-      category: "general",
+      category: "accommodation",
     };
     axios.post('http://localhost:3001/getposts',data, headers).then (res => {
         setPosts(res.data);
@@ -48,18 +47,12 @@ function Home(props) {
   }, [toUser])
   setTimeout(() => {
       var data = {
-          "category": "general"
+          "category": "accommodation"
       }
       axios.post('http://localhost:3001/getposts',data, headers).then (res => {
           setPosts(res.data);
       });
-  }, 900000);
-  const updateImages = (e, idx) => {
-    e.preventDefault();
-    let images = postimages;
-    delete images[idx];
-    setPostImages(images);
-  }
+  }, 900000)
   const postGeneral = (e) => {
     e.preventDefault();
     var data = {
@@ -148,9 +141,9 @@ function Home(props) {
                       </div>
                     </form>
                     {postimages.length > 0 && <div className="thumbnails">
-                        {postimages.map((image, idx) => (
+                        {postimages.map(image => (
                             <div className="item">
-                                <i className="icon-del" onclick={(e) => updateImages(e, idx)}></i>
+                                <i className="icon-del"></i>
                                 <img src={URL.createObjectURL(image)} alt="" />
                             </div>
                         ))}
@@ -180,7 +173,7 @@ function Home(props) {
                           <div>{post.post_msg}</div>
                           {post.images.length > 0 && (
                             <div className="media-container">
-                                <Accommodation images = {post.images}/>
+                                <Corousel images = {post.images}/>
                             </div>
                           )}
 
@@ -235,24 +228,6 @@ function Home(props) {
               )}
             </Row>
           </Col>
-          <Col sm={4} className="right-container">
-            <div className="shadow p-3  bg-white rounded chat-box">
-              {users.length > 0 && users.map((user) => (
-                  user.from_user !== localStorage.getItem("username") && (
-                        <div class="d-flex mt-3 mb-4 align-items-center">
-                        <div className="media me-3 shadow profile-pic">
-                            <img
-                            class="mr-3"
-                            src="../profile.jpg"
-                            alt="Generic placeholder image"
-                            />
-                        </div>
-                        <h4 onClick={() => setToUser(user.from_user)}>{user.from_user}</h4>
-                        </div>
-                        )
-              ))}
-            </div>
-          </Col>
         </Row>
 
         {showChat && <Chat to={toUser}  setShowChat={setShowChat}/>}
@@ -261,4 +236,4 @@ function Home(props) {
   );
 }
 
-export default Home;
+export default Accommodation;

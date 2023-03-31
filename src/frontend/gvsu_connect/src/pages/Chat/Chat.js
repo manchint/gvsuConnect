@@ -21,8 +21,6 @@ function Chat(props) {
     axios
       .post("http://localhost:3001/getmessages", data, headers)
       .then((res) => {
-        console.log(res.data);
-        //navigate('/home');
         setMessages(res.data);
       });
   }, []);
@@ -31,8 +29,6 @@ function Chat(props) {
     axios
       .post("http://localhost:3001/getmessages", data, headers)
       .then((res) => {
-        console.log(res.data);
-        //navigate('/home');
         setMessages(res.data);
       });
   }, 50000);
@@ -42,7 +38,7 @@ function Chat(props) {
       className="on-on-one-chat"
     //   style={{ display: "block", position: "initial" }}
     >
-        <i className="icon-close"></i>
+        <i className="icon-close" onClick={() => props.setShowChat(false)}></i>
       <div className="enter-msg">
         {messages.length > 0 &&
           messages.map((message) => {

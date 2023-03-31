@@ -32,7 +32,7 @@ function Signup() {
                 'email' : userDetails.email
             }
             axios.post('http://localhost:3001/signup', data, headers).then (res => {
-                console.log(res)
+                localStorage.setItem('username', userDetails.username)
                 navigate('/home');
             });
         } else {

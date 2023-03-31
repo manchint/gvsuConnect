@@ -2,16 +2,7 @@ import React from 'react';
 import { Carousel } from 'react-bootstrap';
 
 
-const Accommodation = (props) => {
-  const arrayBufferToBase64 = (bufferArray) => {
-    // var binary = '';
-    // var bytes = [].slice.call(new Uint8Array(buffer));
-    // bytes.forEach((b) => binary += String.fromCharCode(b));
-    // const base64String = `data:image/jpeg;base64,${window.btoa(String.fromCharCode(...new Uint8Array(bufferArray)))}`;
-    // //var base64String = 'data:image/png;base64,'+window.btoa(String.fromCharCode(...new Uint8Array(buffer)));
-    // return base64String;
-    
-  }
+const Corousel = (props) => {
   
   return (
  <>
@@ -43,4 +34,4 @@ const Accommodation = (props) => {
   );
 };
 
-export default Accommodation;
+export default Corousel;

@@ -27,6 +27,13 @@ const router = (app) => {
 								email: req.body.email,
 								password: req.body.password});
 	});
+
+	app.post("/getChatUsers", (req, res) => {
+		userModel.getChatUsers({success:function(data){res.status(200).send(data)},
+								error:function(err){res.send(err)},
+								from: req.body.from,
+							});
+	});
 	app.post("/getposts", (req, res) => {		
 		postsModel.getAllPosts({success:function(data){res.status(200).send(data)},
 								error:function(err){res.send(err)},
@@ -48,6 +55,14 @@ const router = (app) => {
 		postsModel.getAllComments({success:function(data){res.status(200).send(data)},
 								error:function(err){res.send(err)},
 								post_id : req.body.post_id
+							})
+	});
+	app.post("/addComment", (req, res) => {
+		postsModel.addComment({success:function(data){res.status(200).send(data)},
+								error:function(err){res.send(err)},
+								post_id : req.body.post_id,
+								comment_user: req.body.comment_user,
+								msg: req.body.msg
 							})
 	});
 	app.post("/getmessages", (req, res) => {

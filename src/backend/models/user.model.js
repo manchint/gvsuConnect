@@ -27,4 +27,9 @@ userModel.addUser = function(handlers) {
     executeQuery(query, handlers.success, handlers.error);
 }
 
+userModel.getChatUsers = function(handlers) {
+    const query = "SELECT from_user FROM gvsuConnect.messages where from_user = '"+handlers.from+ "' union SELECT from_user FROM gvsuConnect.messages where to_user = '" + handlers.from + "'";
+    executeQuery(query, handlers.success, handlers.error);
+}
+
 export default userModel;

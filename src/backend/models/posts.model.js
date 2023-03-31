@@ -79,7 +79,11 @@ postsModel.addPost = function(handlers) {
 
 postsModel.getAllComments = function(handlers) {
     const query = "SELECT * FROM comments where post_id IN (" + handlers.post_id + ")";
-    //const query = "SELECT * FROM comments where post_id = '" + handlers.post_id + "'";
+    executeQuery(query, handlers.success, handlers.error);
+}
+
+postsModel.addComment = function(handlers) {
+    const query = "insert into comments (post_id, msg, comment_user) values ('" + handlers.post_id + "' , '" + handlers.msg + "','" + handlers.comment_user + "')";
     executeQuery(query, handlers.success, handlers.error);
 }
 

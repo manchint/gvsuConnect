@@ -12,17 +12,15 @@ function Header(props) {
         
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand href="#home">Logo</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#features">Home</Nav.Link>
-            <Nav.Link href="#pricing">Professors</Nav.Link>
-            <Nav.Link href="#pricing">Accommodation</Nav.Link>
+            <Nav.Link onClick={() => navigate("/home")}>Home</Nav.Link>
+            <Nav.Link onClick={() => navigate("/accommodation")}>Accommodation</Nav.Link>
           </Nav>
           <Nav>
           <NavDropdown title={<i className='icon-user'></i>} id="collasible-nav-dropdown">
-              <NavDropdown.Item href="#action/3.2" onClick={() => navigate("/")}>
+              <NavDropdown.Item onClick={() => navigate("/")}>
                 Logout
               </NavDropdown.Item>
              

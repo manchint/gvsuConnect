@@ -61,6 +61,12 @@ const router = (app) => {
 							})
 	});
 
+	app.post("/getplaces", (req, res) => {		
+		postsModel.getPlaces({success:function(data){res.status(200).send(data)},
+								error:function(err){res.send(err)},
+							})
+	});
+
 	app.post("/getComments", (req, res) => {
 		postsModel.getAllComments({success:function(data){res.status(200).send(data)},
 								error:function(err){res.send(err)},

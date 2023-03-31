@@ -16,7 +16,9 @@ function Header(props) {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link onClick={() => navigate("/home")}>Home</Nav.Link>
+            <Nav.Link onClick={() => navigate("/places")}>Places To Visit</Nav.Link>
             <Nav.Link onClick={() => navigate("/accommodation")}>Accommodation</Nav.Link>
+            
           </Nav>
           <Nav>
           <NavDropdown title={<i className='icon-user'></i>} id="collasible-nav-dropdown">

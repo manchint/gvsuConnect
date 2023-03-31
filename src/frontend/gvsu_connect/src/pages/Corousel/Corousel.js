@@ -1,31 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Carousel } from 'react-bootstrap';
 
 
 const Corousel = (props) => {
+
+  const [imageLinks, setImageLinks] = useState([])
+
+  useEffect(() => {
+    if(props.places !== undefined) {
+      setImageLinks(props.image.split(";"));
+    } else {
+      setImageLinks(`http://localhost:3001/${props.image}`)
+    }
+  }, [])
   
   return (
  <>
-    
-  <div className=''>
-  <Carousel interval={null}>
-    <Carousel.Item interval={null}>
-            <img
-              className="d-block w-100 h-100"
-              src={`data:image/jpeg;base64,${props.image}`}
-              src="https://i.stack.imgur.com/ITVv2.png"
-              alt="Image"
-            />
-          </Carousel.Item>
-      {/* {props.images.map((image => (
-          
-      )))} */}
-    </Carousel>
-  </div>
-
-
-
- 
+    {imageLinks.length > 0 && (
+        <div className=''>
+        <Carousel interval={null}>
+        {imageLinks.map((link) => (
+          <Carousel.Item interval={null}>
+                  <img
+                    className="d-block w-100 h-100"
+                    src={link}
+                    alt="Image"
+                  />
+                </Carousel.Item>
+        ))}
+          </Carousel>
+        </div>
+      )}
  </>
   );
 };

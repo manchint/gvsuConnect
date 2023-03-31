@@ -27,7 +27,7 @@ postsModel.getAllPosts = function(handlers) {
                                 connection.query(query,  function(err, image_name){
                                     if(image_name.length > 0) {
                                         //rows[idx]["images"] = fs.readFileSync(`./uploads/${image_name[0].name}`).toString();
-                                        rows[idx]["images"] = `./uploads/${image_name[0].name}`
+                                        rows[idx]["images"] = `uploads/${image_name[0].name}`
                                     }
                                     if(idx === rows.length -1 ) {
                                         handlers.success(rows)
@@ -78,23 +78,6 @@ postsModel.addPost = function(handlers) {
         console.log("dataaa", handlers)
         query = "INSERT INTO images (name, post_id) VALUES ('" + handlers.name + "', '" + res.insertId +"')";
         executeQuery(query, handlers.success, handlers.error);
-        // console.log("adding Images", res.insertId);
-        // handlers.images.map((image, idx) => {
-        //     const data = fs.readFileSync(image.path);
-        //     console.log("image", image);
-        //     const query = "INSERT INTO images (data, post_id) VALUES ('" + image + "', '" + res.insertId +"')";
-        //     console.log(query);
-
-            // connection.query(sql, [image.originalname, image.size, data], (error, results) => {
-            // if (error) throw error;
-            // if(idx === handlers.images.length -1 ) {handlers.success({msg: "Post added successfulyy..."})}
-            // });
-            // query = "INSERT INTO images (data, post_id) VALUES ('" + image + "', '" + res.insertId +"')";
-            // console.log("query", query);
-            // executeQuery(query, (data) => {
-            //     if(idx === handlers.images.length -1 ) {handlers.success({msg: "Post added successfulyy..."})}
-            // }, handlers.error);
-        // })
     }
     executeQuery(query, (data) => addImages(data), handlers.error);
 }
@@ -106,6 +89,11 @@ postsModel.getAllComments = function(handlers) {
 
 postsModel.addComment = function(handlers) {
     const query = "insert into comments (post_id, msg, comment_user) values ('" + handlers.post_id + "' , '" + handlers.msg + "','" + handlers.comment_user + "')";
+    executeQuery(query, handlers.success, handlers.error);
+}
+
+postsModel.getPlaces = function(handlers) {
+    const query = "SELECT * FROM place_to_visit";
     executeQuery(query, handlers.success, handlers.error);
 }
 

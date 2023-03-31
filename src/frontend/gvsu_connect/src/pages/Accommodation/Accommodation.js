@@ -10,6 +10,7 @@ import Chat from "../Chat/Chat";
 import Corousel from "../Corousel/Corousel";
 import { Button } from "react-bootstrap";
 import axios from "axios";
+import { AddComment } from "@material-ui/icons";
 function Accommodation(props) {
   let navigate = useNavigate();
   const [postMsg, setPostMsg] = useState("");
@@ -18,6 +19,7 @@ function Accommodation(props) {
   const [showChat, setShowChat] = useState(false);
   const [users, setUsers] = useState([]);
   const [toUser, setToUser] = useState('');
+  const [images, setImages] = useState([]);
   const [commentData, setCommentData] =  useState({
     commentMsg : '',
     post_id : ''
@@ -41,9 +43,10 @@ function Accommodation(props) {
     axios.post('http://localhost:3001/getChatUsers',userData, headers).then (res => {
         setUsers(res.data);
     });
+    setShowChat(false)
   }, []);
   useEffect(() => {
-    setShowChat(true);
+    if (toUser !== undefined) setShowChat(true);
   }, [toUser])
   setTimeout(() => {
       var data = {
@@ -52,18 +55,42 @@ function Accommodation(props) {
       axios.post('http://localhost:3001/getposts',data, headers).then (res => {
           setPosts(res.data);
       });
-  }, 900000)
+  }, 900000);
+  const updateImages = (e, idx) => {
+    e.preventDefault();
+    let images = postimages;
+    delete images[idx];
+    setPostImages(images);
+  }
   const postGeneral = (e) => {
     e.preventDefault();
+
+    var formData = new FormData();
+    formData.append("username", localStorage.getItem("username"));
+    formData.append("post_msg", postMsg);
+    formData.append("category", "general");
+    Array.from(postimages).map(item => {
+      formData.append("images", item);
+    })
+    var headersForPost = {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "multipart/form-data",
+    };
     var data = {
       username: localStorage.getItem("username"),
       post_msg: postMsg,
       images: postimages,
       category: "general",
     };
-    axios.post("http://localhost:3001/addPost", data, headers).then((res) => {
-      setPosts([...posts, data]);
+    axios.post("http://localhost:3001/addPost", formData).then((res) => {
       setPostMsg("");
+      data = {
+        "category": "accommodation"
+      }
+      axios.post('http://localhost:3001/getposts',data, headers).then (res => {
+          setPosts(res.data);
+      })
+      
     });
   };
   const addComment = (e) => {
@@ -89,6 +116,11 @@ function Accommodation(props) {
   const handleUpload = () => {
     document.querySelector(".upload-images").click();
   };
+
+  const onChangeHandler = e => {
+    console.log(e.target.files);
+    setPostImages(e.target.files);
+  }
 
   return (
     <>
@@ -134,16 +166,14 @@ function Accommodation(props) {
                           id="formFileMultiple"
                           multiple
                           accept="image/png, image/jpeg"
-                          onChange={(e) =>
-                            setPostImages([...postimages, e.target.files[0]])
-                          }
+                          onChange={onChangeHandler}
                         />
                       </div>
                     </form>
-                    {postimages.length > 0 && <div className="thumbnails">
-                        {postimages.map(image => (
+                    {images.length > 0 && <div className="thumbnails">
+                        {images.map((image, idx) => (
                             <div className="item">
-                                <i className="icon-del"></i>
+                                <i className="icon-del" onclick={(e) => updateImages(e, idx)}></i>
                                 <img src={URL.createObjectURL(image)} alt="" />
                             </div>
                         ))}
@@ -171,9 +201,9 @@ function Accommodation(props) {
                         </div>
                         <div class="media-body mt-2">
                           <div>{post.post_msg}</div>
-                          {post.images.length > 0 && (
+                          {post.images !== undefined  && (
                             <div className="media-container">
-                                <Corousel images = {post.images}/>
+                                <Corousel image = {post.images}/>
                             </div>
                           )}
 

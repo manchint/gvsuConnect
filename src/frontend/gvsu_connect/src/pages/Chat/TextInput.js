@@ -35,7 +35,7 @@ export const TextInput = (props) => {
     }
     const sendMessage = (e) => {
         var data = {
-            'from' : props.from,
+            'from' : localStorage.getItem("username"),
             'to' : props.to,
             'msg' : msg
     
@@ -53,15 +53,10 @@ export const TextInput = (props) => {
                 id="standard-text"
                 label="Type your Message Here"
                 className={classes.wrapText}
-                //margin="normal"
                 onChange = {(e) => setMsg(e.target.value)}
                 value={msg}
             />
-            <i className='icon-send' onClick={(e) => sendMessage(e)}></i>
-            {/* <Button variant="contained" color="primary" className={classes.button} 
-                >
-                
-            </Button> */}   
+            <i className='icon-send' onClick={(e) => sendMessage(e)}/>  
             </form>
         </>
     )

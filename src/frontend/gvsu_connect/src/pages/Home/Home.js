@@ -10,7 +10,6 @@ import Chat from "../Chat/Chat";
 import Corousel from "../Corousel/Corousel";
 import { Button } from "react-bootstrap";
 import axios from "axios";
-import { AddComment } from "@material-ui/icons";
 function Home(props) {
   let navigate = useNavigate();
   const [postMsg, setPostMsg] = useState("");
@@ -18,7 +17,8 @@ function Home(props) {
   const [posts, setPosts] = useState([]);
   const [showChat, setShowChat] = useState(false);
   const [users, setUsers] = useState([]);
-  const [toUser, setToUser] = useState('');
+  const [toUser, setToUser] = useState();
+  const [images, setImages] = useState([]);
   const [commentData, setCommentData] =  useState({
     commentMsg : '',
     post_id : ''
@@ -30,6 +30,7 @@ function Home(props) {
   };
 
   useEffect(() => {
+    setShowChat(false)
     var data = {
       category: "general",
     };
@@ -43,8 +44,14 @@ function Home(props) {
         setUsers(res.data);
     });
   }, []);
+  const updateImages = (e, idx) => {
+    e.preventDefault();
+    let images = images;
+    delete images[idx];
+    setImages(images);
+  }
   useEffect(() => {
-    setShowChat(true);
+    if (toUser !== undefined) setShowChat(true);
   }, [toUser])
   setTimeout(() => {
       var data = {
@@ -54,12 +61,6 @@ function Home(props) {
           setPosts(res.data);
       });
   }, 900000);
-  const updateImages = (e, idx) => {
-    e.preventDefault();
-    let images = postimages;
-    delete images[idx];
-    setPostImages(images);
-  }
   const postGeneral = (e) => {
     e.preventDefault();
 
@@ -68,10 +69,6 @@ function Home(props) {
     formData.append("post_msg", postMsg);
     formData.append("category", "general");
     
-    //formData.append("images", postimages);
-    // for (const key of Object.keys(postimages)) {
-    //   formData.append("images", )
-    // }
     Array.from(postimages).map(item => {
       formData.append("images", item);
     })
@@ -118,8 +115,7 @@ function Home(props) {
   const onChangeHandler = e => {
     console.log(e.target.files);
     setPostImages(e.target.files);
-    // const imageArray = Array.from(e.target.files).map((file) => URL.createObjectURL(file));
-    // setPostImages((images) => images.concat(imageArray))
+    setImages([...images, e.target.files[0]])
   }
 
   return (
@@ -152,7 +148,7 @@ function Home(props) {
                           value={postMsg}
                         ></textarea>
                       </div>
-                      <div className="d-flex align-items-center">
+                      {/* <div className="d-flex align-items-center">
                         <i
                           className="bi bi-upload"
                           onClick={() => handleUpload()}
@@ -168,16 +164,16 @@ function Home(props) {
                           accept="image/png, image/jpeg"
                           onChange={onChangeHandler}
                         />
-                      </div>
+                      </div> */}
                     </form>
-                    {/* {postimages.length > 0 && <div className="thumbnails">
-                        {postimages.map((image, idx) => (
+                    {images.length > 0 && <div className="thumbnails">
+                        {images.map((image, idx) => (
                             <div className="item">
                                 <i className="icon-del" onclick={(e) => updateImages(e, idx)}></i>
                                 <img src={URL.createObjectURL(image)} alt="" />
                             </div>
                         ))}
-                    </div>} */}
+                    </div>}
                   </div>
                 </div>
                 <div className="d-flex justify-content-end  ">
@@ -201,11 +197,11 @@ function Home(props) {
                         </div>
                         <div class="media-body mt-2">
                           <div>{post.post_msg}</div>
-                          {post.images !== undefined  && (
+                          {/* {post.images !== undefined  && (
                             <div className="media-container">
                                 <Corousel image = {post.images}/>
                             </div>
-                          )}
+                          )} */}
 
                         </div>
                       </div>

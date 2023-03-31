@@ -1,6 +1,6 @@
 import {executeQuery} from '../common.js'
 import mysql from 'mysql'
-
+import * as fs from 'fs';
 const postsModel = {}
 
 postsModel.getAllPosts = function(handlers) {
@@ -23,25 +23,35 @@ postsModel.getAllPosts = function(handlers) {
                         else if(idx === rows.length -1 ) {
                             rows[idx]["comments"] = comments;
                             rows.map((post, idx) => {
-                                query = "SELECT data FROM images where post_id = '" + post.post_Id + "'";
-                                connection.query(query,  function(err, images){
-                                    if(err) handlers.error(err);
-                                    else {
-                                        var imageData = []
-                                        if(images.length > 0) {
-                                            images.map((image, index) => {
-                                                imageData.push(image.data)
-                                                if(index === images.length - 1) { rows[idx]["images"] = imageData; }
-                                            })
-                                        } else {
-                                            rows[idx]["images"] = imageData;
-                                        }
-                                        
+                                query = "SELECT name FROM images where post_id = '" + post.post_Id + "'";
+                                connection.query(query,  function(err, image_name){
+                                    if(image_name.length > 0) {
+                                        //rows[idx]["images"] = fs.readFileSync(`./uploads/${image_name[0].name}`).toString();
+                                        rows[idx]["images"] = `./uploads/${image_name[0].name}`
                                     }
                                     if(idx === rows.length -1 ) {
                                         handlers.success(rows)
                                     }
-                                  });
+                                //console.log(URL.createObjectURL(`./uploads${name}`))
+                                });
+                                // connection.query(query,  function(err, images){
+                                //     if(err) handlers.error(err);
+                                //     else {
+                                //         var imageData = []
+                                //         if(images.length > 0) {
+                                //             images.map((image, index) => {
+                                //                 imageData.push(image.data)
+                                //                 if(index === images.length - 1) { rows[idx]["images"] = imageData; }
+                                //             })
+                                //         } else {
+                                //             rows[idx]["images"] = imageData;
+                                //         }
+                                        
+                                //     }
+                                //     if(idx === rows.length -1 ) {
+                                //         handlers.success(rows)
+                                //     }
+                                //   });
                             })
                         }
                         else {
@@ -59,20 +69,32 @@ postsModel.getAllPosts = function(handlers) {
 
  
 postsModel.addPost = function(handlers) {
+    
     let query = "";
     if ( handlers.category === "general") {
         query ="INSERT INTO posts (username, post_msg, category) VALUES ('" + handlers.username + "' , '" + handlers.postMsg + "' , '" + handlers.category +"')";
     }
     const addImages = (res) => {
-        console.log("adding Images", res.insertId);
-        handlers.images.map((image, idx) => {
-            query = "INSERT INTO images (data, post_id) VALUES ('" + image + "', '" + res.insertId +"')";
-            console.log("query", query);
-            executeQuery(query, (data) => {
-                if(idx === handlers.images.length -1 ) {handlers.success({msg: "Post added successfulyy..."})}
-            }, handlers.error);
-        })
-        
+        console.log("dataaa", handlers)
+        query = "INSERT INTO images (name, post_id) VALUES ('" + handlers.name + "', '" + res.insertId +"')";
+        executeQuery(query, handlers.success, handlers.error);
+        // console.log("adding Images", res.insertId);
+        // handlers.images.map((image, idx) => {
+        //     const data = fs.readFileSync(image.path);
+        //     console.log("image", image);
+        //     const query = "INSERT INTO images (data, post_id) VALUES ('" + image + "', '" + res.insertId +"')";
+        //     console.log(query);
+
+            // connection.query(sql, [image.originalname, image.size, data], (error, results) => {
+            // if (error) throw error;
+            // if(idx === handlers.images.length -1 ) {handlers.success({msg: "Post added successfulyy..."})}
+            // });
+            // query = "INSERT INTO images (data, post_id) VALUES ('" + image + "', '" + res.insertId +"')";
+            // console.log("query", query);
+            // executeQuery(query, (data) => {
+            //     if(idx === handlers.images.length -1 ) {handlers.success({msg: "Post added successfulyy..."})}
+            // }, handlers.error);
+        // })
     }
     executeQuery(query, (data) => addImages(data), handlers.error);
 }

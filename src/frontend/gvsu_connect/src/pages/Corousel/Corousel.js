@@ -9,21 +9,17 @@ const Corousel = (props) => {
     
   <div className=''>
   <Carousel interval={null}>
-      {props.images.map((image => (
-          <Carousel.Item interval={null}>
+    <Carousel.Item interval={null}>
             <img
               className="d-block w-100 h-100"
-              src={`data:image/jpeg;base64,${btoa(
-                new Uint8Array(image.data).reduce(
-                  (data, byte) => data + String.fromCharCode(byte),
-                  ''
-                )
-              )}`}
-              // src={URL.createObjectURL(new Blob([image.data], { type: 'image/jpeg' }))}
+              src={`data:image/jpeg;base64,${props.image}`}
+              src="https://i.stack.imgur.com/ITVv2.png"
               alt="Image"
             />
           </Carousel.Item>
-      )))}
+      {/* {props.images.map((image => (
+          
+      )))} */}
     </Carousel>
   </div>
 

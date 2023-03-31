@@ -30,9 +30,7 @@ create table `gvsuConnect`.posts (
 
 create table `gvsuConnect`.images (
 	image_id int primary key auto_increment,
-    name VARCHAR(255) NOT NULL,
-	type VARCHAR(255) NOT NULL,
-	data LONGBLOB NOT NULL,
+    name varchar(30) NOT NULL,
     post_id int,
     foreign key (post_id) references posts(post_Id)
 )

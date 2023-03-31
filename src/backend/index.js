@@ -18,7 +18,7 @@ app.use(
 );
 app.use(cors());
 routes(app);
-
+const directory = path.join(__dirname, 'utils/uploads')
 const server = app.listen(port, (error) => {
     if (error) return console.log(`Error: ${error}`);
 	console.log(`Server listening on port ${server.address().port}`);

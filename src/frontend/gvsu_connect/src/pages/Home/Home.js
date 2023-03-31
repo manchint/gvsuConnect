@@ -7,7 +7,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Chat from "../Chat/Chat";
-import Accommodation from "../Corousel/Corousel";
+import Corousel from "../Corousel/Corousel";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import { AddComment } from "@material-ui/icons";
@@ -62,13 +62,31 @@ function Home(props) {
   }
   const postGeneral = (e) => {
     e.preventDefault();
+
+    var formData = new FormData();
+    formData.append("username", localStorage.getItem("username"));
+    formData.append("post_msg", postMsg);
+    formData.append("category", "general");
+    
+    //formData.append("images", postimages);
+    // for (const key of Object.keys(postimages)) {
+    //   formData.append("images", )
+    // }
+    Array.from(postimages).map(item => {
+      formData.append("images", item);
+    })
+    //Object.values(postimages).map(item => {formData.append("images",item)})
+    var headersForPost = {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "multipart/form-data",
+    };
     var data = {
       username: localStorage.getItem("username"),
       post_msg: postMsg,
       images: postimages,
       category: "general",
     };
-    axios.post("http://localhost:3001/addPost", data, headers).then((res) => {
+    axios.post("http://localhost:3001/addPost", formData).then((res) => {
       setPosts([...posts, data]);
       setPostMsg("");
     });
@@ -96,6 +114,13 @@ function Home(props) {
   const handleUpload = () => {
     document.querySelector(".upload-images").click();
   };
+
+  const onChangeHandler = e => {
+    console.log(e.target.files);
+    setPostImages(e.target.files);
+    // const imageArray = Array.from(e.target.files).map((file) => URL.createObjectURL(file));
+    // setPostImages((images) => images.concat(imageArray))
+  }
 
   return (
     <>
@@ -141,20 +166,18 @@ function Home(props) {
                           id="formFileMultiple"
                           multiple
                           accept="image/png, image/jpeg"
-                          onChange={(e) =>
-                            setPostImages([...postimages, e.target.files[0]])
-                          }
+                          onChange={onChangeHandler}
                         />
                       </div>
                     </form>
-                    {postimages.length > 0 && <div className="thumbnails">
+                    {/* {postimages.length > 0 && <div className="thumbnails">
                         {postimages.map((image, idx) => (
                             <div className="item">
                                 <i className="icon-del" onclick={(e) => updateImages(e, idx)}></i>
                                 <img src={URL.createObjectURL(image)} alt="" />
                             </div>
                         ))}
-                    </div>}
+                    </div>} */}
                   </div>
                 </div>
                 <div className="d-flex justify-content-end  ">
@@ -178,9 +201,9 @@ function Home(props) {
                         </div>
                         <div class="media-body mt-2">
                           <div>{post.post_msg}</div>
-                          {post.images.length > 0 && (
+                          {post.images !== undefined  && (
                             <div className="media-container">
-                                <Accommodation images = {post.images}/>
+                                <Corousel image = {post.images}/>
                             </div>
                           )}
 

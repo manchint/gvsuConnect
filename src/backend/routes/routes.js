@@ -1,9 +1,19 @@
 import userModel from '../models/user.model.js';
 import postsModel from '../models/posts.model.js';
 import messagesModel from '../models/messages.model.js';
+import multer from 'multer';
 
 import cryptoJs from 'crypto-js';
-
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, './uploads')
+    },
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + '-' + file.originalname)
+    }
+  });
+const upload = multer({ storage: storage });
+const multipleUpload = upload.fields([{name: "file1"}])
 const router = (app) => {
     app.get("/", (request, response) => {
 		response.send({
@@ -40,13 +50,13 @@ const router = (app) => {
 								category : req.body.category
 							})
 	});
-
-	app.post("/addPost", (req, res) => {
+	app.post("/addPost", upload.single('images'), (req, res) => {
+		//console.log(req.file.filename)
 		postsModel.addPost({success:function(data){res.status(200).send(data)},
 								error:function(err){res.send(err)},
 								username : req.body.username,
 								postMsg : req.body.post_msg,
-								images : req.body.images,
+								name : req.file.filename,
 								category : req.body.category
 							})
 	});

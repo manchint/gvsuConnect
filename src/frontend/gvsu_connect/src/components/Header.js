@@ -21,9 +21,8 @@ function Header(props) {
             <Nav.Link href="#pricing">Accommodation</Nav.Link>
           </Nav>
           <Nav>
-          <NavDropdown title="Name" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Profile</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
+          <NavDropdown title={<i className='icon-user'></i>} id="collasible-nav-dropdown">
+              <NavDropdown.Item href="#action/3.2" onClick={() => navigate("/")}>
                 Logout
               </NavDropdown.Item>
              

@@ -22,17 +22,24 @@ postsModel.getAllPosts = function(handlers) {
                         if(err) handlers.error(err);
                         else if(idx === rows.length -1 ) {
                             rows[idx]["comments"] = comments;
-                            //handlers.success(rows)
                             rows.map((post, idx) => {
-                                query = "SELECT * FROM images where post_id = '" + post.post_Id + "'";
+                                query = "SELECT data FROM images where post_id = '" + post.post_Id + "'";
                                 connection.query(query,  function(err, images){
                                     if(err) handlers.error(err);
-                                    else if(idx === rows.length -1 ) {
-                                        rows[idx]["images"] = images;
-                                        handlers.success(rows)
-                                    }
                                     else {
-                                        rows[idx]["comments"] = images;
+                                        var imageData = []
+                                        if(images.length > 0) {
+                                            images.map((image, index) => {
+                                                imageData.push(image.data)
+                                                if(index === images.length - 1) { rows[idx]["images"] = imageData; }
+                                            })
+                                        } else {
+                                            rows[idx]["images"] = imageData;
+                                        }
+                                        
+                                    }
+                                    if(idx === rows.length -1 ) {
+                                        handlers.success(rows)
                                     }
                                   });
                             })
@@ -59,7 +66,7 @@ postsModel.addPost = function(handlers) {
     const addImages = (res) => {
         console.log("adding Images", res.insertId);
         handlers.images.map((image, idx) => {
-            query = "INSERT INTO images (imageData, post_id) VALUES ('" + image + "', '" + res.insertId +"')";
+            query = "INSERT INTO images (data, post_id) VALUES ('" + image + "', '" + res.insertId +"')";
             console.log("query", query);
             executeQuery(query, (data) => {
                 if(idx === handlers.images.length -1 ) {handlers.success({msg: "Post added successfulyy..."})}

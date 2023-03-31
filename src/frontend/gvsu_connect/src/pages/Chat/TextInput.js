@@ -57,10 +57,11 @@ export const TextInput = (props) => {
                 onChange = {(e) => setMsg(e.target.value)}
                 value={msg}
             />
-            <Button variant="contained" color="primary" className={classes.button} 
-                onClick={(e) => sendMessage(e)}>
-                <SendIcon />
-            </Button>
+            <i className='icon-send' onClick={(e) => sendMessage(e)}></i>
+            {/* <Button variant="contained" color="primary" className={classes.button} 
+                >
+                
+            </Button> */}   
             </form>
         </>
     )

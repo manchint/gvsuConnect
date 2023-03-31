@@ -1,7 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Link} from 'react-router-dom';
-
-import cryptoJs from 'crypto-js';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 function Login() {
@@ -11,10 +9,7 @@ function Login() {
     let passRef = useRef()
 
    const onClickLogin = (e) => {
-        e.preventDefault()
-        console.log(passRef)
-        //var ciphertext = cryptoJs.AES.encrypt(passRef.current.value, 'mypassword').toString();
-        //navigate('/home');
+        e.preventDefault();
         var headers = {
             'Access-Control-Allow-Origin': '*',
             'Accept': 'application/json',
@@ -24,7 +19,6 @@ function Login() {
             "username": emailRef.current.value,
             "password": passRef.current.value
         }
-        // console.log(JSON.stringify(data))
         axios.post('http://localhost:3001/login',data, headers).then (res => {
                 localStorage.setItem('username', emailRef.current.value)
                 console.log(res)

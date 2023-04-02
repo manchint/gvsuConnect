@@ -4,14 +4,13 @@ const userModel = {}
 import cryptoJs from 'crypto-js';
 
 const onFetchUsernameSuccessCallBack =  function(data, password, successCallback) {
-    //var originalText  = cryptoJs.AES.decrypt(password, 'mypassword').toString;
     if(data.length === 0) {
         var response = {msg: "User not found"}
     }
-    else if(data[0].password != password) {
+    else if(data[0].pass != password) {
         successCallback({msg: "Login failed"})
     } else {
-        successCallback({status: "Success"})
+        successCallback({msg: "Success"})
     }
 }
 
@@ -28,7 +27,7 @@ userModel.addUser = function(handlers) {
 }
 
 userModel.getChatUsers = function(handlers) {
-    const query = "SELECT from_user FROM gvsuConnect.messages where from_user = '"+handlers.from+ "' union SELECT from_user FROM gvsuConnect.messages where to_user = '" + handlers.from + "'";
+    const query = "SELECT from_user FROM gvsuConnect.messages where from_user = '"+handlers.from+ "' union SELECT to_user FROM gvsuConnect.messages where from_user = '" + handlers.from + "'";
     executeQuery(query, handlers.success, handlers.error);
 }
 

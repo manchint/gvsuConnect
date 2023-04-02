@@ -10,7 +10,7 @@ const Corousel = (props) => {
     if(props.places !== undefined) {
       setImageLinks(props.image.split(";"));
     } else {
-      setImageLinks(`http://localhost:3001/${props.image}`)
+      setImageLinks([...imageLinks,`http://localhost:3001/${props.image}`])
     }
   }, [])
   

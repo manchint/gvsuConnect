@@ -9,7 +9,6 @@ import Form from "react-bootstrap/Form";
 import Chat from "../Chat/Chat";
 import Corousel from "../Corousel/Corousel";
 import { Button } from "react-bootstrap";
-import axios from "axios";
 function Home(props) {
   let navigate = useNavigate();
   const [postMsg, setPostMsg] = useState("");
@@ -28,21 +27,41 @@ function Home(props) {
     "Accept": "application/json",
     "Content-Type": "application/json",
   };
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+   // const base64 = await convertToBase64(file);
+    // let images = postimages;
+    // images.push(e.target.files[0])
+    setPostImages([...postimages, e.target.files]);
+  };
 
   useEffect(() => {
     setShowChat(false)
     var data = {
       category: "general",
     };
-    axios.post('http://localhost:3001/getposts',data, headers).then (res => {
-        setPosts(res.data);
-    });
+    // axios.post('http://localhost:3001/getposts',data, headers).then (res => {
+    //     setPosts(res.data);
+    // });
     var userData = {
         from: localStorage.getItem("username")
     };
-    axios.post('http://localhost:3001/getChatUsers',userData, headers).then (res => {
-        setUsers(res.data);
-    });
+    // axios.post('http://localhost:3001/getChatUsers',userData, headers).then (res => {
+    //     console.log(res.data)
+    //     setUsers(res.data);
+    // });
   }, []);
   const updateImages = (e, idx) => {
     e.preventDefault();
@@ -51,42 +70,44 @@ function Home(props) {
     setImages(images);
   }
   useEffect(() => {
-    if (toUser !== undefined) setShowChat(true);
+    setShowChat(true);
   }, [toUser])
   setTimeout(() => {
       var data = {
           "category": "general"
       }
-      axios.post('http://localhost:3001/getposts',data, headers).then (res => {
-          setPosts(res.data);
-      });
+      // axios.post('http://localhost:3001/getposts',data, headers).then (res => {
+      //     setPosts(res.data);
+      // });
   }, 900000);
   const postGeneral = (e) => {
     e.preventDefault();
-
-    var formData = new FormData();
-    formData.append("username", localStorage.getItem("username"));
-    formData.append("post_msg", postMsg);
-    formData.append("category", "general");
-    
-    Array.from(postimages).map(item => {
-      formData.append("images", item);
-    })
-    //Object.values(postimages).map(item => {formData.append("images",item)})
-    var headersForPost = {
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "multipart/form-data",
-    };
     var data = {
       username: localStorage.getItem("username"),
       post_msg: postMsg,
       images: postimages,
       category: "general",
     };
-    axios.post("http://localhost:3001/addPost", formData).then((res) => {
-      setPosts([...posts, data]);
-      setPostMsg("");
-    });
+    // var formData = new FormData();
+    // formData.append("username", localStorage.getItem("username"));
+    // formData.append("post_msg", postMsg);
+    // formData.append("category", "accommodation");
+    // Array.from(postimages).map(item => {
+    //   formData.append("images", item);
+    // })
+    var headersForPost = {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "multipart/form-data",
+    };
+    // // axios.post("http://localhost:3001/addGeneralPost", data, headers).then((res) => {
+    // //   var data = {
+    // //     "category": "accommodation"
+    // //   }
+    // //   axios.post('http://localhost:3001/getposts',data, headers).then (res => {
+    // //     setPosts(res.data);
+    // // });
+    //   setPostMsg("");
+    // });
   };
   const addComment = (e) => {
     e.preventDefault();
@@ -95,28 +116,29 @@ function Home(props) {
         comment_user: localStorage.getItem("username"),
         msg : commentData.commentMsg
       }
-      setCommentData({
-        commentMsg : '',
-        post_id : ''
-      });
       var data = {
         "category": "general"
-    }
-      axios.post("http://localhost:3001/addComment", dataComments, headers).then((res) => {
-        axios.post('http://localhost:3001/getposts',data, headers).then (res => {
-          setPosts(res.data);
-      });
-    });
+      }
+    // }
+    //   axios.post("http://localhost:3001/addComment", dataComments, headers).then((res) => {
+    //     setCommentData({
+    //       commentMsg : '',
+    //       post_id : ''
+    //     });
+    //     axios.post('http://localhost:3001/getposts',data, headers).then (res => {
+    //       setPosts(res.data);
+    //   });
+    // });
   }
   const handleUpload = () => {
     document.querySelector(".upload-images").click();
   };
 
-  const onChangeHandler = e => {
-    console.log(e.target.files);
-    setPostImages(e.target.files);
-    setImages([...images, e.target.files[0]])
-  }
+  // const onChangeHandler = e => {
+  //   console.log(e.target.files);
+  //   setPostImages(e.target.files);
+  //   setImages([...images, e.target.files[0]])
+  // }
 
   return (
     <>
@@ -148,7 +170,7 @@ function Home(props) {
                           value={postMsg}
                         ></textarea>
                       </div>
-                      {/* <div className="d-flex align-items-center">
+                      <div className="d-flex align-items-center">
                         <i
                           className="bi bi-upload"
                           onClick={() => handleUpload()}
@@ -162,9 +184,9 @@ function Home(props) {
                           id="formFileMultiple"
                           multiple
                           accept="image/png, image/jpeg"
-                          onChange={onChangeHandler}
+                          onChange={(e) => handleFileUpload(e)}
                         />
-                      </div> */}
+                      </div>
                     </form>
                     {images.length > 0 && <div className="thumbnails">
                         {images.map((image, idx) => (
@@ -197,12 +219,6 @@ function Home(props) {
                         </div>
                         <div class="media-body mt-2">
                           <div>{post.post_msg}</div>
-                          {/* {post.images !== undefined  && (
-                            <div className="media-container">
-                                <Corousel image = {post.images}/>
-                            </div>
-                          )} */}
-
                         </div>
                       </div>
                       <h4 className="header">Comments:</h4>
@@ -242,6 +258,7 @@ function Home(props) {
                             <Form.Control
                               type="email"
                               placeholder="Any Comments?"
+                              value={commentData.commentMsg}
                               onChange={(e) => setCommentData({commentMsg : e.target.value, post_id: post.post_Id})}
                             />
                             <i className="icon-send" onClick={(e) => addComment(e)}></i>

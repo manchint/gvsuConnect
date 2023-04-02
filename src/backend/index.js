@@ -17,8 +17,12 @@ app.use(
 	})
 );
 app.use(cors());
+
+
 app.use(express.static('public'))
-app.use('/uploads', express.static('uploads'))
+app.use('/uploads', express.static('uploads'));
+app.use(bodyParser.json({limit: '1000mb', extended: true}))
+app.use(bodyParser.urlencoded({limit: '100mb', extended: true}))
 routes(app);
 
 const server = app.listen(port, (error) => {

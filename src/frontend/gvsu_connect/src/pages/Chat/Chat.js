@@ -5,7 +5,6 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 import { TextInput } from "./TextInput";
-import axios from "axios";
 function Chat(props) {
   var data = {
     from: localStorage.getItem("username"),
@@ -18,19 +17,19 @@ function Chat(props) {
   };
   const [messages, setMessages] = useState([]);
   useEffect(() => {
-    axios
-      .post("http://localhost:3001/getmessages", data, headers)
-      .then((res) => {
-        setMessages(res.data);
-      });
+    // axios
+    //   .post("http://localhost:3001/getmessages", data, headers)
+    //   .then((res) => {
+    //     setMessages(res.data);
+    //   });
   }, []);
 
   setTimeout(() => {
-    axios
-      .post("http://localhost:3001/getmessages", data, headers)
-      .then((res) => {
-        setMessages(res.data);
-      });
+    // axios
+    //   .post("http://localhost:3001/getmessages", data, headers)
+    //   .then((res) => {
+    //     setMessages(res.data);
+    //   });
   }, 50000);
   const currentUser = localStorage.getItem("username");
   return (

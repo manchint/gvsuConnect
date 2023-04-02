@@ -1,30 +1,27 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link} from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 function Login() {
   
     let navigate = useNavigate();
     let emailRef = useRef();
     let passRef = useRef()
-
+    const [errmsg, setErrMsg] = useState();
    const onClickLogin = (e) => {
         e.preventDefault();
-        var headers = {
-            'Access-Control-Allow-Origin': '*',
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-        var data = {
-            "username": emailRef.current.value,
-            "password": passRef.current.value
-        }
-        axios.post('http://localhost:3001/login',data, headers).then (res => {
-                localStorage.setItem('username', emailRef.current.value)
-                console.log(res)
-                navigate('/home');
-            });
-
+        const auth = getAuth();
+        signInWithEmailAndPassword(auth, emailRef.current.value, passRef.current.value)
+        .then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            navigate('/home');
+            // ...
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+        });
    }
     
     return (
@@ -35,6 +32,7 @@ function Login() {
                     <div className="login100-more" ></div>
                     <div className="wrap-login100 p-l-50 p-r-50 p-t-72 p-b-50">
                         <form classNameName="login100-form validate-form">
+                            <span style={{color:'red'}}>{errmsg}</span>
                             <span className="login100-form-title pb-5">
                                 Login
                             </span>

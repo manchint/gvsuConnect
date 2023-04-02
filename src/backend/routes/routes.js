@@ -50,20 +50,24 @@ const router = (app) => {
 								category : req.body.category
 							})
 	});
+	app.post("/addGeneralPost", (req, res) => {
+		console.log("svfvfdv", req.body.images)
+		postsModel.addPost({success:function(data){res.status(200).send(data)},
+								error:function(err){res.send(err)},
+								username : req.body.username,
+								postMsg : req.body.post_msg,
+								images : req.body.images,
+								category : req.body.category
+							})
+	});
 	app.post("/addPost", upload.single('images'), (req, res) => {
-		//console.log(req.file.filename)
+		console.log(req.username)
 		postsModel.addPost({success:function(data){res.status(200).send(data)},
 								error:function(err){res.send(err)},
 								username : req.body.username,
 								postMsg : req.body.post_msg,
 								name : req.file.filename,
 								category : req.body.category
-							})
-	});
-
-	app.post("/getplaces", (req, res) => {		
-		postsModel.getPlaces({success:function(data){res.status(200).send(data)},
-								error:function(err){res.send(err)},
 							})
 	});
 

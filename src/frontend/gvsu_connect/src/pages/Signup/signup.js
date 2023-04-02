@@ -1,44 +1,42 @@
 import React, { useState } from 'react';
 import {Link} from 'react-router-dom';
-
-import cryptoJs from 'crypto-js';
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import {db} from '../../firebase'
+import { doc, setDoc } from 'firebase/firestore';
 function Signup() {
     let navigate = useNavigate();
     const [userDetails, setUserDetails] = useState({
         'fname' : '',
         'lname' : '',
-        'username' : '',
         'password' : '',
         'email' : ''
     })
     const [confirmPassword, setConfirmPassword] = useState('')
 
-    const onClickSubmit = (e) => {
-        e.preventDefault()
-        if(confirmPassword === userDetails.password) {
-            var headers = {
-                'Access-Control-Allow-Origin': '*',
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-            // var ciphertext = cryptoJs.AES.encrypt(userDetails.password, 'mypassword').toString();
-            var data = {
-                'fname' : userDetails.fname,
-                'lname' : userDetails.lname,
-                'username' : userDetails.username,
-                'password' : userDetails.password,
-                'email' : userDetails.email
-            }
-            axios.post('http://localhost:3001/signup', data, headers).then (res => {
-                localStorage.setItem('username', userDetails.username)
-                navigate('/home');
+    const onClickSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const auth = getAuth();
+            const userCredentials = await createUserWithEmailAndPassword(auth, userDetails.email, userDetails.password)
+                .then(async (userCredential) => {
+                    // Signed in 
+                    const user = userCredential.user;
+                    updateProfile(auth.currentUser, {
+                        displayName : userDetails.fname + ' ' + userDetails.lname
+                    })
+                    const dataCopy = {...userDetails};
+                    delete dataCopy.password;
+                    await setDoc(doc(db, "users", user.uid), dataCopy)
+                    navigate('/home');
+                })
+                .catch((error) => {
+                    //ReactToastify.toast('Message');
+                    
             });
-        } else {
-            alert("Passwor and confrim password doesn't match");
+        } catch(err) {
+
         }
-        
 
    }
 
@@ -71,12 +69,6 @@ function Signup() {
                         <input className="input100" type="email" name="mail"  placeholder="Email" required 
                             onChange={(e) => setUserDetails({...userDetails,'email': e.target.value})}
                             value = {userDetails.email}/>
-                        <span className="focus-input100"></span>
-                    </div>
-                    <div className="wrap-input100 validate-input">                        
-                        <input className="input100" type="text" name="uname"  placeholder="User Name" required 
-                            onChange={(e) => setUserDetails({...userDetails,'username': e.target.value})}
-                            value = {userDetails.username}/>
                         <span className="focus-input100"></span>
                     </div>
                     <div className="wrap-input100 validate-input">                        

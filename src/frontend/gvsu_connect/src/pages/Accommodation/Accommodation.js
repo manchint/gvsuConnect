@@ -9,7 +9,6 @@ import Form from "react-bootstrap/Form";
 import Chat from "../Chat/Chat";
 import Corousel from "../Corousel/Corousel";
 import { Button } from "react-bootstrap";
-import axios from "axios";
 import { AddComment } from "@material-ui/icons";
 function Accommodation(props) {
   let navigate = useNavigate();
@@ -34,15 +33,15 @@ function Accommodation(props) {
     var data = {
       category: "accommodation",
     };
-    axios.post('http://localhost:3001/getposts',data, headers).then (res => {
-        setPosts(res.data);
-    });
-    var userData = {
-        from: localStorage.getItem("username")
-    };
-    axios.post('http://localhost:3001/getChatUsers',userData, headers).then (res => {
-        setUsers(res.data);
-    });
+    // axios.post('http://localhost:3001/getposts',data, headers).then (res => {
+    //     setPosts(res.data);
+    // });
+    // var userData = {
+    //     from: localStorage.getItem("username")
+    // };
+    // axios.post('http://localhost:3001/getChatUsers',userData, headers).then (res => {
+    //     setUsers(res.data);
+    // });
     setShowChat(false)
   }, []);
   useEffect(() => {
@@ -52,9 +51,9 @@ function Accommodation(props) {
       var data = {
           "category": "accommodation"
       }
-      axios.post('http://localhost:3001/getposts',data, headers).then (res => {
-          setPosts(res.data);
-      });
+      // axios.post('http://localhost:3001/getposts',data, headers).then (res => {
+      //     setPosts(res.data);
+      // });
   }, 900000);
   const updateImages = (e, idx) => {
     e.preventDefault();
@@ -68,7 +67,7 @@ function Accommodation(props) {
     var formData = new FormData();
     formData.append("username", localStorage.getItem("username"));
     formData.append("post_msg", postMsg);
-    formData.append("category", "general");
+    formData.append("category", "accommodation");
     Array.from(postimages).map(item => {
       formData.append("images", item);
     })
@@ -80,18 +79,18 @@ function Accommodation(props) {
       username: localStorage.getItem("username"),
       post_msg: postMsg,
       images: postimages,
-      category: "general",
+      category: "accommodation",
     };
-    axios.post("http://localhost:3001/addPost", formData).then((res) => {
-      setPostMsg("");
-      data = {
-        "category": "accommodation"
-      }
-      axios.post('http://localhost:3001/getposts',data, headers).then (res => {
-          setPosts(res.data);
-      })
+    // axios.post("http://localhost:3001/addPost", formData).then((res) => {
+    //   setPostMsg("");
+    //   data = {
+    //     "category": "accommodation"
+    //   }
+    //   axios.post('http://localhost:3001/getposts',data, headers).then (res => {
+    //       setPosts(res.data);
+    //   })
       
-    });
+    // });
   };
   const addComment = (e) => {
     e.preventDefault();
@@ -100,18 +99,18 @@ function Accommodation(props) {
         comment_user: localStorage.getItem("username"),
         msg : commentData.commentMsg
       }
-      setCommentData({
-        commentMsg : '',
-        post_id : ''
-      });
       var data = {
-        "category": "general"
+        "category": "accommodation"
     }
-      axios.post("http://localhost:3001/addComment", dataComments, headers).then((res) => {
-        axios.post('http://localhost:3001/getposts',data, headers).then (res => {
-          setPosts(res.data);
-      });
-    });
+    //   axios.post("http://localhost:3001/addComment", dataComments, headers).then((res) => {
+    //     setCommentData({
+    //       commentMsg : '',
+    //       post_id : ''
+    //     });
+    //     axios.post('http://localhost:3001/getposts',data, headers).then (res => {
+    //       setPosts(res.data);
+    //   });
+    // });
   }
   const handleUpload = () => {
     document.querySelector(".upload-images").click();
@@ -165,7 +164,7 @@ function Accommodation(props) {
                           type="file"
                           id="formFileMultiple"
                           multiple
-                          accept="image/png, image/jpeg"
+                          accept=".png, .jpeg .jpeg"
                           onChange={onChangeHandler}
                         />
                       </div>

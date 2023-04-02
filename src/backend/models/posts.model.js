@@ -69,15 +69,15 @@ postsModel.getAllPosts = function(handlers) {
 
  
 postsModel.addPost = function(handlers) {
-    
     let query = "";
-    if ( handlers.category === "general") {
-        query ="INSERT INTO posts (username, post_msg, category) VALUES ('" + handlers.username + "' , '" + handlers.postMsg + "' , '" + handlers.category +"')";
-    }
+    query ="INSERT INTO posts (username, post_msg, category) VALUES ('" + handlers.username + "' , '" + handlers.postMsg + "' , '" + handlers.category +"')";
     const addImages = (res) => {
-        console.log("dataaa", handlers)
-        query = "INSERT INTO images (name, post_id) VALUES ('" + handlers.name + "', '" + res.insertId +"')";
-        executeQuery(query, handlers.success, handlers.error);
+        handlers.images.map((image, idx) => {
+            console.log(image)
+            // query = "INSERT INTO images (name, post_id) VALUES ('" + handlers.name + "', '" + res.insertId +"')";
+            // executeQuery(query, handlers.success, handlers.error);
+        })
+        
     }
     executeQuery(query, (data) => addImages(data), handlers.error);
 }

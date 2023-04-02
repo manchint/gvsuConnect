@@ -3,7 +3,6 @@ import TextField from '@material-ui/core/TextField';
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import SendIcon from '@material-ui/icons/Send';
 import Button from '@material-ui/core/Button';
-import axios from 'axios';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,9 +41,9 @@ export const TextInput = (props) => {
         }
         setMsg('');
         e.preventDefault();
-        axios.post('http://localhost:3001/sendmessage',data, headers).then (res => {
-            //if anything needed to be done
-        });
+        // axios.post('http://localhost:3001/sendmessage',data, headers).then (res => {
+        //     //if anything needed to be done
+        // });
     }
     return (
         <>

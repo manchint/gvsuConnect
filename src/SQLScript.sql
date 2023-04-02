@@ -24,7 +24,7 @@ create table `gvsuConnect`.posts (
     details varchar(20),
     location varchar(50),
     price int,
-    category varchar(10),
+    category varchar(25),
     foreign key (username) references users(username)
 );
 
@@ -40,7 +40,7 @@ drop table if exists `gvsuConnect`.place_to_visit;
 create table `gvsuConnect`.place_to_visit (
 	p_Id int primary key auto_increment,
     location varchar(50),
-    travel_info varchar(100),
+    travel_info varchar(1000),
     imagesLinks varchar(500)
 );
 
@@ -57,7 +57,7 @@ create table `gvsuConnect`.messages (
 drop table if exists `gvsuConnect`.comments;
 create table `gvsuConnect`.comments (
 	post_id int,
-    msg varchar(30),
+    msg varchar(300),
     comment_user varchar(10),
     ts DATETIME default CURRENT_TIMESTAMP,
     foreign key (comment_user) references users(username),

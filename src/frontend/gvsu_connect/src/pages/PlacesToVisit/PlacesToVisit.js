@@ -6,7 +6,6 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Corousel from "../Corousel/Corousel";
-import axios from "axios";
 function PlacesToVisit(props) {
   const [places, setPlaces] = useState([])
   var headers = {
@@ -17,15 +16,15 @@ function PlacesToVisit(props) {
 
   useEffect(() => {
     var data = {};
-    axios.post('http://localhost:3001/getplaces',data, headers).then (res => {
-        setPlaces(res.data);
-    });
+    // axios.post('http://localhost:3001/getplaces',data, headers).then (res => {
+    //     setPlaces(res.data);
+    // });
   }, []);
   setTimeout(() => {
       var data = {}
-      axios.post('http://localhost:3001/getplaces',data, headers).then (res => {
-        setPlaces(res.data);
-      });
+    //   axios.post('http://localhost:3001/getplaces',data, headers).then (res => {
+    //     setPlaces(res.data);
+    //   });
   }, 900000);
 
   return (

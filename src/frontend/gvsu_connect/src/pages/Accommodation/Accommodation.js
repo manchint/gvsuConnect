@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import Header from "../../components/Header";
 import Container from "react-bootstrap/Container";
@@ -9,120 +9,165 @@ import Form from "react-bootstrap/Form";
 import Chat from "../Chat/Chat";
 import Corousel from "../Corousel/Corousel";
 import { Button } from "react-bootstrap";
-import { AddComment } from "@material-ui/icons";
-function Accommodation(props) {
+import { getAuth } from "firebase/auth";
+import {db} from '../../firebase';
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import { v4 as uuidv4 } from "uuid";
+import { addDoc, collection, serverTimestamp, getDocs, doc, updateDoc } from "firebase/firestore";
+import toast, { Toaster } from 'react-hot-toast';
+// import { getDatabase, ref as dbDatabase,dbref } from "firebase/database";
+function Accommodation({route, navigation}) {
   let navigate = useNavigate();
-  const [postMsg, setPostMsg] = useState("");
-  const [postimages, setPostImages] = useState([]);
+  let location = useLocation();
+  console.log(location.state.category)
+  const [formdata, setFormData] = useState({
+    postMsg : '',
+    postimages: {},
+    user: ''
+  })
   const [posts, setPosts] = useState([]);
   const [showChat, setShowChat] = useState(false);
-  const [users, setUsers] = useState([]);
-  const [toUser, setToUser] = useState('');
-  const [images, setImages] = useState([]);
-  const [commentData, setCommentData] =  useState({
-    commentMsg : '',
-    post_id : ''
-  });
-  var headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Accept": "application/json",
-    "Content-Type": "application/json",
-  };
+  const [toUser, setToUser] = useState();
+  const [users, setusers] = useState([])
+  const auth = getAuth();
 
+  const getPosts =  async () => {
+    const querySnapshot = await getDocs(collection(db, "posts"));
+    let postsTemp = [];
+    let postIds = [];
+    let idx = 0;
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, " => ", doc.data());
+        idx += 1;
+        if(postIds.indexOf(doc.id) < 0) {
+          if(doc.data().category == location.state.category) {
+            postIds.push(doc.id)
+            postsTemp.push({id:doc.id, data:doc.data()});
+          }
+        }
+        if(querySnapshot.size - 1 == idx) {setPosts(postsTemp)}
+      });
+      const messagesSna = await getDocs(collection(db, "messages"));
+        let users = [];
+        let msgidx = 0;
+        messagesSna.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.id, " => ", doc.data(), "===", idx);
+          if(users.indexOf(doc.data().from) < 0) {
+            users.push(doc.data().from);
+          }
+          else if(users.indexOf(doc.data().to) < 0) {
+            users.push(doc.data().to)
+          }
+          idx += 1;
+          if(messagesSna.size - 1 == msgidx) {setusers(users)}
+        });
+  };
   useEffect(() => {
-    var data = {
-      category: "accommodation",
-    };
-    // axios.post('http://localhost:3001/getposts',data, headers).then (res => {
-    //     setPosts(res.data);
-    // });
-    // var userData = {
-    //     from: localStorage.getItem("username")
-    // };
-    // axios.post('http://localhost:3001/getChatUsers',userData, headers).then (res => {
-    //     setUsers(res.data);
-    // });
-    setShowChat(false)
+    if(auth.currentUser == null || auth.currentUser == undefined) {navigate("/")}
+    else {setFormData((prevState) => ({
+      ...prevState,
+      user : auth.currentUser.displayName
+    }))}
+    getPosts();
   }, []);
-  useEffect(() => {
-    if (toUser !== undefined) setShowChat(true);
-  }, [toUser])
-  setTimeout(() => {
-      var data = {
-          "category": "accommodation"
-      }
-      // axios.post('http://localhost:3001/getposts',data, headers).then (res => {
-      //     setPosts(res.data);
-      // });
-  }, 900000);
-  const updateImages = (e, idx) => {
-    e.preventDefault();
-    let images = postimages;
-    delete images[idx];
-    setPostImages(images);
+  const onClickofChat = (e, user) => {
+    if(user !== auth.currentUser.displayName) {
+      setToUser(user);
+      setShowChat(true);
+    }
+    
   }
-  const postGeneral = (e) => {
+  const storeImage = async (image) => {
+    return new Promise((resolve, reject) => {
+      const storage = getStorage();
+      const filename = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
+      const storageRef = ref(storage, filename);
+      const uploadTask = uploadBytesResumable(storageRef, image);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+          }
+        },
+        (error) => {
+          // Handle unsuccessful uploads
+          reject(error);
+        },
+        () => {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            resolve(downloadURL);
+          });
+        }
+      );
+    });
+  }
+  const uploadPost = async (e) => {
     e.preventDefault();
 
-    var formData = new FormData();
-    formData.append("username", localStorage.getItem("username"));
-    formData.append("post_msg", postMsg);
-    formData.append("category", "accommodation");
-    Array.from(postimages).map(item => {
-      formData.append("images", item);
-    })
-    var headersForPost = {
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "multipart/form-data",
-    };
-    var data = {
-      username: localStorage.getItem("username"),
-      post_msg: postMsg,
-      images: postimages,
-      category: "accommodation",
-    };
-    // axios.post("http://localhost:3001/addPost", formData).then((res) => {
-    //   setPostMsg("");
-    //   data = {
-    //     "category": "accommodation"
-    //   }
-    //   axios.post('http://localhost:3001/getposts',data, headers).then (res => {
-    //       setPosts(res.data);
-    //   })
-      
-    // });
-  };
-  const addComment = (e) => {
-    e.preventDefault();
-      var dataComments = {
-        post_id: commentData.post_id,
-        comment_user: localStorage.getItem("username"),
-        msg : commentData.commentMsg
-      }
-      var data = {
-        "category": "accommodation"
+    const imagesURL =  formdata.postimages.length > 0 ? await Promise.all(
+      [...formdata.postimages].map((image) => storeImage(image))) : []
+    console.log(imagesURL);
+    const formdataCopy = {
+      ...formdata,
+      imagesURL: imagesURL,
+      category: location.state.category,
+      timestamp: serverTimestamp(),
     }
-    //   axios.post("http://localhost:3001/addComment", dataComments, headers).then((res) => {
-    //     setCommentData({
-    //       commentMsg : '',
-    //       post_id : ''
-    //     });
-    //     axios.post('http://localhost:3001/getposts',data, headers).then (res => {
-    //       setPosts(res.data);
-    //   });
-    // });
-  }
+    delete formdataCopy.postimages;
+    //uplpoading to firebase
+    const docRef = await addDoc(collection(db, "posts"), formdataCopy);
+    setFormData((prevState) => ({
+      ...prevState,
+      postMsg : '',
+      postimages: {},
+    }))
+    toast.success('Successfully Added!')
+    getPosts();
+  };
+  const addComment = async (e, idx, id) => {
+    e.preventDefault();
+    const docController = doc(db, "posts", id);
+    const postDataCopy = {
+      ...posts[idx],
+    }
+    const comment = {
+      commentUser: auth.currentUser.displayName,
+      commentMsg: posts[idx].commentMsg
+    }
+    postDataCopy.data.comments = postDataCopy.data.comments == undefined ? [comment] : [...postDataCopy.data.comments, comment]
+    const docRef = await updateDoc(docController, postDataCopy.data);
+    getPosts();
+    }
   const handleUpload = () => {
     document.querySelector(".upload-images").click();
   };
 
-  const onChangeHandler = e => {
-    console.log(e.target.files);
-    setPostImages(e.target.files);
-  }
-
   return (
     <>
+       <div><Toaster
+            position="bottom-center"
+            reverseOrder={false}
+            /></div>
       <Header />
 
       <Container className="mt-3">
@@ -139,7 +184,7 @@ function Accommodation(props) {
                     />
                   </div>
                   <div class="media-body w-100">
-                    <h5 class="mt-0">{localStorage.getItem("username")}</h5>
+                    <h5 class="mt-0">{auth.currentUser == null ? '' : auth.currentUser.displayName}</h5>
                     <form>
                       <div class="mb-3">
                         <textarea
@@ -147,8 +192,11 @@ function Accommodation(props) {
                           id="exampleFormControlTextarea1"
                           rows="3"
                           placeholder="Write your thoughts"
-                          onChange={(e) => setPostMsg(e.target.value)}
-                          value={postMsg}
+                          onChange={(e) => setFormData((prevState) => ({
+                            ...prevState,
+                            postMsg : e.target.value
+                          }))}
+                          value={formdata.postMsg}
                         ></textarea>
                       </div>
                       <div className="d-flex align-items-center">
@@ -156,7 +204,7 @@ function Accommodation(props) {
                           className="bi bi-upload"
                           onClick={() => handleUpload()}
                         ></i>
-                        <span>Images/Video</span>
+                        <span>Upload Images</span>
                       </div>
                       <div className="mb-3">
                         <input
@@ -164,15 +212,17 @@ function Accommodation(props) {
                           type="file"
                           id="formFileMultiple"
                           multiple
-                          accept=".png, .jpeg .jpeg"
-                          onChange={onChangeHandler}
+                          accept=".jpg,.png,.jpeg"
+                          onChange={(e) => setFormData((prevState) => ({
+                            ...prevState,
+                            postimages : e.target.files
+                          }))}
                         />
                       </div>
                     </form>
-                    {images.length > 0 && <div className="thumbnails">
-                        {images.map((image, idx) => (
+                    {formdata.postimages.length > 0 && <div className="thumbnails">
+                        {[...formdata.postimages].map((image) => (
                             <div className="item">
-                                <i className="icon-del" onclick={(e) => updateImages(e, idx)}></i>
                                 <img src={URL.createObjectURL(image)} alt="" />
                             </div>
                         ))}
@@ -180,14 +230,14 @@ function Accommodation(props) {
                   </div>
                 </div>
                 <div className="d-flex justify-content-end  ">
-                  <Button onClick={(e) => postGeneral(e)}>Post</Button>
+                  <Button onClick={(e) => uploadPost(e)}>Post</Button>
                 </div>
               </div>
             </Row>
             <Row sm={12} className="min-height-600">
               {posts.length > 0 && (
                 <>
-                  {posts.map((post) => (
+                  {posts.map((post, idx) => (
                     <div className="shadow p-3 mt-2  bg-white rounded">
                       <div class="mt-3 mb-4">
                         <div className="d-flex align-items-center media me-3 shadow profile-pic">
@@ -196,22 +246,22 @@ function Accommodation(props) {
                             src="../profile.jpg"
                             alt="Generic placeholder image"
                           />
-                          <h4 className="ml-10" onClick={() => {if(post.username !== localStorage.getItem("username")) {setToUser(post.username)}}}>{post.username}</h4>
+                          <h4 className="ml-10" onClick={(e) => onClickofChat(e, post.data.user)}>{post.data.user}</h4>
                         </div>
                         <div class="media-body mt-2">
-                          <div>{post.post_msg}</div>
-                          {post.images !== undefined  && (
+                          <div>{post.data.postMsg}</div>
+                          {post.data.imagesURL.length > 0  && (
                             <div className="media-container">
-                                <Corousel image = {post.images}/>
+                                <Corousel imagesURL = {post.data.imagesURL}/>
                             </div>
                           )}
 
                         </div>
                       </div>
                       <h4 className="header">Comments:</h4>
-                      {post.comments !== undefined &&
-                        post.comments.length > 0 &&
-                        post.comments.map((comment) => (
+                      {post.data.comments !== undefined &&
+                        post.data.comments.length > 0 &&
+                        post.data.comments.map((comment) => (
                           <div class="d-flex mt-3 mb-4">
                             <div className="media me-3 shadow profile-pic">
                               <img
@@ -222,9 +272,9 @@ function Accommodation(props) {
                             </div>
                             <div class="media-body comment-box">
                               <h6 class="mt-0 user-name">
-                                {comment.comment_user}
+                                {comment.commentUser}
                               </h6>
-                              {comment.msg}
+                              {comment.commentMsg}
                             </div>
                           </div>
                         ))}
@@ -245,9 +295,16 @@ function Accommodation(props) {
                             <Form.Control
                               type="email"
                               placeholder="Any Comments?"
-                              onChange={(e) => setCommentData({commentMsg : e.target.value, post_id: post.post_Id})}
+                              value={post.commentMsg}
+                              onChange={(e) =>  {
+                                let tempPosts = [...posts];
+                                let item = {...tempPosts[idx]};
+                                item.commentMsg = e.target.value;
+                                tempPosts[idx] = item
+                                setPosts(tempPosts)
+                              }}
                             />
-                            <i className="icon-send" onClick={(e) => addComment(e)}></i>
+                            <i className="icon-send" onClick={(e) => addComment(e, idx, post.id)}></i>
                           </Form.Group>
                         </Form>
                       </div>
@@ -256,6 +313,24 @@ function Accommodation(props) {
                 </>
               )}
             </Row>
+          </Col>
+          <Col sm={4} className="right-container">
+            <div className="shadow p-3  bg-white rounded chat-box">
+              {users.length > 0 && users.map((user) => (
+                  user.from_user !== localStorage.getItem("username") && (
+                        <div class="d-flex mt-3 mb-4 align-items-center">
+                        <div className="media me-3 shadow profile-pic">
+                            <img
+                            class="mr-3"
+                            src="../profile.jpg"
+                            alt="Generic placeholder image"
+                            />
+                        </div>
+                        <h4 onClick={() => setToUser(user.from_user)}>{user.from_user}</h4>
+                        </div>
+                        )
+              ))}
+            </div>
           </Col>
         </Row>
 

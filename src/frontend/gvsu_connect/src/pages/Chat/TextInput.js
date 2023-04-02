@@ -3,7 +3,9 @@ import TextField from '@material-ui/core/TextField';
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import SendIcon from '@material-ui/icons/Send';
 import Button from '@material-ui/core/Button';
-
+import { getAuth } from "firebase/auth";
+import {db} from '../../firebase';
+import { addDoc, collection, query, where, serverTimestamp, orderBy, getDocs, doc, updateDoc } from "firebase/firestore";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     wrapForm : {
@@ -26,24 +28,21 @@ const useStyles = makeStyles((theme: Theme) =>
 export const TextInput = (props) => {
     const classes = useStyles();
     const [msg, setMsg] = useState();
-    
+    const auth = getAuth();
     var headers = {
         'Access-Control-Allow-Origin': '*',
         'Accept': 'application/json',
         'Content-Type': 'application/json'
     }
-    const sendMessage = (e) => {
+    const sendMessage = async (e) => {
         var data = {
-            'from' : localStorage.getItem("username"),
+            'from' : auth.currentUser.displayName,
             'to' : props.to,
             'msg' : msg
-    
         }
-        setMsg('');
         e.preventDefault();
-        // axios.post('http://localhost:3001/sendmessage',data, headers).then (res => {
-        //     //if anything needed to be done
-        // });
+        const docRef = await addDoc(collection(db, "messages"), data);
+        setMsg('');
     }
     return (
         <>

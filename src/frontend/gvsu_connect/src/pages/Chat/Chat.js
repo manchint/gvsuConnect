@@ -3,8 +3,16 @@ import React, { useEffect, useState } from "react";
 import { MessageLeft, MessageRight } from "./Message";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-
+import {db} from '../../firebase';
+import { addDoc, collection, query, where, serverTimestamp, orderBy, getDocs, doc, updateDoc } from "firebase/firestore";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 import { TextInput } from "./TextInput";
+import { getAuth } from "firebase/auth";
 function Chat(props) {
   var data = {
     from: localStorage.getItem("username"),
@@ -16,22 +24,26 @@ function Chat(props) {
     "Content-Type": "application/json",
   };
   const [messages, setMessages] = useState([]);
+  const auth = getAuth();
   useEffect(() => {
-    // axios
-    //   .post("http://localhost:3001/getmessages", data, headers)
-    //   .then((res) => {
-    //     setMessages(res.data);
-    //   });
+    const getPosts =  async () => {
+      const querySnapshot = await getDocs(collection(db, "messages"));
+        let messagesTemp = [];
+        let idx = 0;
+        let temp = await querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.id, " => ", doc.data(), "===", idx);
+          //let 
+          messagesTemp.push(doc.data());
+          idx += 1;
+          if(querySnapshot.size - 1 == idx) {setMessages(messagesTemp)}
+        });
+    };
+    getPosts();
   }, []);
-
-  setTimeout(() => {
-    // axios
-    //   .post("http://localhost:3001/getmessages", data, headers)
-    //   .then((res) => {
-    //     setMessages(res.data);
-    //   });
-  }, 50000);
-  const currentUser = localStorage.getItem("username");
+  useEffect(() => {
+    console.log(messages)
+  }, [messages])
   return (
     <div
       className="on-on-one-chat"
@@ -41,16 +53,16 @@ function Chat(props) {
       <div className="enter-msg">
         {messages.length > 0 &&
           messages.map((message) => {
-            return message.from_user === currentUser ? (
+            return message.from === auth.currentUser.displayName ? (
               <MessageRight message={message.msg} />
             ) : (
               <MessageLeft
-                displayName={message.from_user}
+                displayName={message.from}
                 message={message.msg}
               />
             );
           })}
-        <TextInput from={props.from} to={props.to} />
+        <TextInput to={props.to} />
       </div>
     </div>
   );

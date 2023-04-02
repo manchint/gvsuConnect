@@ -4,6 +4,7 @@ import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase
 import { useNavigate } from 'react-router-dom';
 import {db} from '../../firebase'
 import { doc, setDoc } from 'firebase/firestore';
+import toast, { Toaster } from 'react-hot-toast';
 function Signup() {
     let navigate = useNavigate();
     const [userDetails, setUserDetails] = useState({
@@ -31,7 +32,7 @@ function Signup() {
                     navigate('/home');
                 })
                 .catch((error) => {
-                    //ReactToastify.toast('Message');
+                    toast.error(error.message)
                     
             });
         } catch(err) {
@@ -42,6 +43,10 @@ function Signup() {
 
     return (
         <div className="limiter">
+            <div><Toaster
+            position="bottom-center"
+            reverseOrder={false}
+            /></div>
         <div className="container-login100">
             <div className="login100-more" ></div>
             <div className="wrap-login100 p-l-50 p-r-50 p-t-72 p-b-50">

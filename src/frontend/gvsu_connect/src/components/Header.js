@@ -15,13 +15,43 @@ function Header(props) {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link onClick={() => navigate("/home")}>Home</Nav.Link>
-            <Nav.Link onClick={() => navigate("/places")}>Places To Visit</Nav.Link>
-            <Nav.Link onClick={() => navigate("/accommodation")}>Accommodation</Nav.Link>
-            
+            <Nav.Link onClick={() => navigate("/main")}>Home</Nav.Link>
+            <Nav.Link onClick={() => navigate("/posts", {
+                    state : {
+                        category: "general"
+                    }
+                    
+                })}>General</Nav.Link>
+            <Nav.Link onClick={() => navigate("/posts", {
+                    state : {
+                        category: "accommodation"
+                    }
+                    
+                })}>Accommodation</Nav.Link>
+            <Nav.Link onClick={() => navigate("/posts", {
+                    state : {
+                        category: "car rides"
+                    }
+                    
+                })}>Car Rides</Nav.Link>
+            <Nav.Link onClick={() => navigate("/posts", {
+                    state : {
+                        category: "Places"
+                    }
+                    
+                })}>Places To Visit</Nav.Link>
+            <Nav.Link onClick={() => navigate("/posts", {
+                    state : {
+                        category: "hangout"
+                    }
+                    
+                })}>Hangout places</Nav.Link>
           </Nav>
           <Nav>
           <NavDropdown title={<i className='icon-user'></i>} id="collasible-nav-dropdown">
+              <NavDropdown.Item onClick={() => navigate("/")}>
+                Profile
+              </NavDropdown.Item>
               <NavDropdown.Item onClick={() => navigate("/")}>
                 Logout
               </NavDropdown.Item>

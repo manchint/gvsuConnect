@@ -1,13 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link} from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import toast, { Toaster } from 'react-hot-toast';
 function Login() {
   
     let navigate = useNavigate();
     let emailRef = useRef();
     let passRef = useRef()
     const [errmsg, setErrMsg] = useState();
+    const auth = getAuth();
    const onClickLogin = (e) => {
         e.preventDefault();
         const auth = getAuth();
@@ -15,18 +17,28 @@ function Login() {
         .then((userCredential) => {
             // Signed in 
             const user = userCredential.user;
-            navigate('/home');
+            console.log(auth.currentUser)
+            localStorage.setItem("name",auth.currentUser)
+            navigate('/main');
             // ...
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
+            toast.error(error.message)
         });
    }
+
+   useEffect(() => {
+    if(auth.currentUser == null || auth.currentUser == undefined) {navigate("/")}
+   }, [])
     
     return (
         <>
-          
+          <div><Toaster
+            position="bottom-center"
+            reverseOrder={false}
+            /></div>
             <div className="limiter">
                 <div className="container-login100">
                     <div className="login100-more" ></div>

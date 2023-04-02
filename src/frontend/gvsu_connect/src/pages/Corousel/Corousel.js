@@ -6,24 +6,24 @@ const Corousel = (props) => {
 
   const [imageLinks, setImageLinks] = useState([])
 
-  useEffect(() => {
-    if(props.places !== undefined) {
-      setImageLinks(props.image.split(";"));
-    } else {
-      setImageLinks([...imageLinks,`http://localhost:3001/${props.image}`])
-    }
-  }, [])
+  // useEffect(() => {
+  //   if(props.places !== undefined) {
+  //     setImageLinks(props.image.split(";"));
+  //   } else {
+  //     setImageLinks([...imageLinks,`http://localhost:3001/${props.image}`])
+  //   }
+  // }, [])
   
   return (
  <>
-    {imageLinks.length > 0 && (
+    {props.imagesURL.length > 0 && (
         <div className=''>
         <Carousel interval={null}>
-        {imageLinks.map((link) => (
+        {[...props.imagesURL].map((url) => (
           <Carousel.Item interval={null}>
                   <img
                     className="d-block w-100 h-100"
-                    src={link}
+                    src={url}
                     alt="Image"
                   />
                 </Carousel.Item>

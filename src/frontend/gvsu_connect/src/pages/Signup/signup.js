@@ -29,7 +29,7 @@ function Signup() {
                     const dataCopy = {...userDetails};
                     delete dataCopy.password;
                     await setDoc(doc(db, "users", user.uid), dataCopy)
-                    navigate('/home');
+                    navigate('/main');
                 })
                 .catch((error) => {
                     toast.error(error.message)

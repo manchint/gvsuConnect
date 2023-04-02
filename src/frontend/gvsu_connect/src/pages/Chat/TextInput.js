@@ -43,6 +43,7 @@ export const TextInput = (props) => {
         e.preventDefault();
         const docRef = await addDoc(collection(db, "messages"), data);
         setMsg('');
+        props.getPosts()
     }
     return (
         <>

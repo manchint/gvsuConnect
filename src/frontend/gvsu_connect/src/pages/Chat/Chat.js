@@ -25,20 +25,22 @@ function Chat(props) {
   };
   const [messages, setMessages] = useState([]);
   const auth = getAuth();
-  useEffect(() => {
-    const getPosts =  async () => {
-      const querySnapshot = await getDocs(collection(db, "messages"));
-        let messagesTemp = [];
-        let idx = 0;
-        let temp = await querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          console.log(doc.id, " => ", doc.data(), "===", idx);
-          //let 
+  const getPosts =  async () => {
+    const querySnapshot = await getDocs(collection(db, "messages"));
+      let messagesTemp = [];
+      let idx = 0;
+      let temp = await querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, " => ", doc.data(), "===", idx);
+        //let 
+        if(doc.data().from === auth.currentUser.displayName || doc.data().to === auth.currentUser.displayName) {
           messagesTemp.push(doc.data());
-          idx += 1;
-          if(querySnapshot.size - 1 == idx) {setMessages(messagesTemp)}
-        });
-    };
+        }
+        idx += 1;
+        if(querySnapshot.size - 1 == idx) {setMessages(messagesTemp)}
+      });
+  };
+  useEffect(() => {
     getPosts();
   }, []);
   useEffect(() => {
@@ -62,7 +64,7 @@ function Chat(props) {
               />
             );
           })}
-        <TextInput to={props.to} />
+        <TextInput to={props.to} getPosts={getPosts}/>
       </div>
     </div>
   );

@@ -24,7 +24,6 @@ import toast, { Toaster } from 'react-hot-toast';
 function Accommodation({route, navigation}) {
   let navigate = useNavigate();
   let location = useLocation();
-  console.log(location.state.category)
   const [formdata, setFormData] = useState({
     postMsg : '',
     postimages: {},
@@ -59,13 +58,13 @@ function Accommodation({route, navigation}) {
         messagesSna.forEach((doc) => {
           // doc.data() is never undefined for query doc snapshots
           console.log(doc.id, " => ", doc.data(), "===", idx);
-          if(users.indexOf(doc.data().from) < 0) {
+          if(users.indexOf(doc.data().from) < 0 && doc.data().from !== auth.currentUser.displayName) {
             users.push(doc.data().from);
           }
-          else if(users.indexOf(doc.data().to) < 0) {
+          else if(users.indexOf(doc.data().to) < 0 && doc.data().to !== auth.currentUser.displayName) {
             users.push(doc.data().to)
           }
-          idx += 1;
+          msgidx += 1;
           if(messagesSna.size - 1 == msgidx) {setusers(users)}
         });
   };
@@ -77,6 +76,14 @@ function Accommodation({route, navigation}) {
     }))}
     getPosts();
   }, []);
+  useEffect(() => {
+    if(auth.currentUser == null || auth.currentUser == undefined) {navigate("/")}
+    else {setFormData((prevState) => ({
+      ...prevState,
+      user : auth.currentUser.displayName
+    }))}
+    getPosts();
+  }, [location.state]);
   const onClickofChat = (e, user) => {
     if(user !== auth.currentUser.displayName) {
       setToUser(user);
@@ -316,8 +323,7 @@ function Accommodation({route, navigation}) {
           </Col>
           <Col sm={4} className="right-container">
             <div className="shadow p-3  bg-white rounded chat-box">
-              {users.length > 0 && users.map((user) => (
-                  user.from_user !== localStorage.getItem("username") && (
+              {users.length > 0 && [...users].map((user) => (
                         <div class="d-flex mt-3 mb-4 align-items-center">
                         <div className="media me-3 shadow profile-pic">
                             <img
@@ -326,9 +332,8 @@ function Accommodation({route, navigation}) {
                             alt="Generic placeholder image"
                             />
                         </div>
-                        <h4 onClick={() => setToUser(user.from_user)}>{user.from_user}</h4>
+                        <h4 onClick={(e) => onClickofChat(e,user)}>{user}</h4>
                         </div>
-                        )
               ))}
             </div>
           </Col>

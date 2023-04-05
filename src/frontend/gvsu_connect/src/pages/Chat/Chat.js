@@ -52,8 +52,10 @@ function Chat(props) {
       className="on-on-one-chat"
     //   style={{ display: "block", position: "initial" }}
     >
-        <a>{props.to}</a>
-        <i className="icon-close" onClick={() => props.setShowChat(false)}></i>
+        <div style={{padding: '5px',backgroundColor: '#0d6efd',color: 'white'}}>
+          <a>{props.to}</a>
+          <i className="icon-close" onClick={() => props.setShowChat(false)}></i>
+        </div>
       <div className="enter-msg">
         {messages.length > 0 &&
           messages.map((message) => {

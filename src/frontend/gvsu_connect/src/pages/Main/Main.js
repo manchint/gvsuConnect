@@ -12,9 +12,14 @@ function Main(props) {
     }, [])
     return (
         <div>
-            <p>Welcome Home!!</p>
+        <div style={{display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            marginTop: '10%',
+            backgroundImage: './assests/bg.jpg'}}>
+            <p style={{color: 'brown'}}>Welcome {auth.currentUser.displayName}!!</p>
             <Row>
-            <Card style={{ width: '18rem', margin:'20px', cursor: "pointer" }}
+            <Card style={{ width: '18rem', margin:'20px', cursor: "pointer", backgroundColor: 'gainsboro', color: 'brown' }}
                 onClick={() => navigate("/posts", {
                     state : {
                         category: "general"
@@ -26,7 +31,7 @@ function Main(props) {
                     <Card.Text>Genral queries related to anything</Card.Text>
                 </Card.Body>
             </Card>
-            <Card style={{ width: '18rem', margin:'20px', cursor: "pointer"  }}
+            <Card style={{ width: '18rem', margin:'20px', cursor: "pointer", backgroundColor: 'gainsboro', color: 'brown'  }}
                 onClick={() => navigate("/posts", {
                     state : {
                         category: "accommodation"
@@ -38,7 +43,7 @@ function Main(props) {
                     <Card.Text>Accommodation availability</Card.Text>
                 </Card.Body>
             </Card>
-            <Card style={{ width: '18rem', margin:'20px', cursor: "pointer"  }}
+            <Card style={{ width: '18rem', margin:'20px', cursor: "pointer", backgroundColor: 'gainsboro', color: 'brown'  }}
                 onClick={() => navigate("/posts", {
                     state : {
                         category: "car rides"
@@ -52,7 +57,7 @@ function Main(props) {
             </Card>
             </Row>
             <Row>
-            <Card style={{ width: '18rem', margin:'20px', cursor: "pointer" }}
+            <Card style={{ width: '18rem', margin:'20px', cursor: "pointer", backgroundColor: 'gainsboro', color: 'brown' }}
                 onClick={() => navigate("/posts", {
                     state : {
                         category: "Places"
@@ -64,7 +69,7 @@ function Main(props) {
                     <Card.Text>Places to visit over the weekend</Card.Text>
                 </Card.Body>
             </Card>
-            <Card style={{ width: '18rem', margin:'20px', cursor: "pointer"  }}
+            <Card style={{ width: '18rem', margin:'20px', cursor: "pointer", backgroundColor: 'gainsboro', color: 'brown'  }}
                 onClick={() => navigate("/posts", {
                     state : {
                         category: "hangout"
@@ -76,7 +81,7 @@ function Main(props) {
                     <Card.Text>Best places to hangout with friends</Card.Text>
                 </Card.Body>
             </Card>
-            <Card style={{ width: '18rem', margin:'20px', cursor: "pointer"  }}
+            <Card style={{ width: '18rem', margin:'20px', cursor: "pointer", backgroundColor: 'gainsboro', color: 'brown'  }}
                 onClick={() => navigate("/posts", {
                     state : {
                         category: "hangout"
@@ -89,6 +94,7 @@ function Main(props) {
                 </Card.Body>
             </Card>
             </Row>
+        </div>
         </div>
     )
 }

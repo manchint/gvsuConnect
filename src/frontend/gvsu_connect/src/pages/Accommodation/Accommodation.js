@@ -68,6 +68,10 @@ function Accommodation({route, navigation}) {
           if(messagesSna.size - 1 == msgidx) {setusers(users)}
         });
   };
+
+  useEffect(() => {
+    getPosts();
+  })
   useEffect(() => {
     if(auth.currentUser == null || auth.currentUser == undefined) {navigate("/")}
     else {setFormData((prevState) => ({

@@ -14,19 +14,11 @@ import {
 import { TextInput } from "./TextInput";
 import { getAuth } from "firebase/auth";
 function Chat(props) {
-  var data = {
-    from: localStorage.getItem("username"),
-    to: props.to,
-  };
-  var headers = {
-    "Access-Control-Allow-Origin": "*",
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  };
   const [messages, setMessages] = useState([]);
   const auth = getAuth();
   const getPosts =  async () => {
-    const querySnapshot = await getDocs(collection(db, "messages"));
+    const q = query(collection(db, "messages"), orderBy("timestamp"));
+    const querySnapshot = await getDocs(q);
       let messagesTemp = [];
       let idx = 0;
       let temp = await querySnapshot.forEach((doc) => {
@@ -34,10 +26,19 @@ function Chat(props) {
         console.log(doc.id, " => ", doc.data(), "===", idx);
         //let 
         if(doc.data().from === auth.currentUser.displayName || doc.data().to === auth.currentUser.displayName) {
-          messagesTemp.push(doc.data());
+          if(doc.data().from === props.to || doc.data().to === props.to) {
+            messagesTemp.push(doc.data());
+          }
         }
         idx += 1;
-        if(querySnapshot.size - 1 == idx) {setMessages(messagesTemp)}
+        if(querySnapshot.size - 1 == idx) {
+          // messagesTemp = messagesTemp.sort((a, b) => {
+          //   if (a.timestamp < b.timestamp) {
+          //     return -1;
+          //   }
+          // });
+          setMessages(messagesTemp)
+        }
       });
   };
   useEffect(() => {
@@ -51,6 +52,7 @@ function Chat(props) {
       className="on-on-one-chat"
     //   style={{ display: "block", position: "initial" }}
     >
+        <a>{props.to}</a>
         <i className="icon-close" onClick={() => props.setShowChat(false)}></i>
       <div className="enter-msg">
         {messages.length > 0 &&

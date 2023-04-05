@@ -5,29 +5,78 @@ import { useNavigate } from 'react-router-dom';
 import {db} from '../../firebase'
 import { doc, setDoc } from 'firebase/firestore';
 import toast, { Toaster } from 'react-hot-toast';
+import {
+    getStorage,
+    ref,
+    uploadBytesResumable,
+    getDownloadURL,
+  } from "firebase/storage";
+import { v4 as uuidv4 } from "uuid";
 function Signup() {
     let navigate = useNavigate();
     const [userDetails, setUserDetails] = useState({
         'fname' : '',
         'lname' : '',
         'password' : '',
-        'email' : ''
+        'email' : '',
+        'profile' : {}
     })
     const [confirmPassword, setConfirmPassword] = useState('')
-
+    const storeImage = async (image) => {
+        return new Promise((resolve, reject) => {
+          const auth = getAuth();
+          const storage = getStorage();
+          const filename = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
+          const storageRef = ref(storage, filename);
+          const uploadTask = uploadBytesResumable(storageRef, image);
+          uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+              // Observe state change events such as progress, pause, and resume
+              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+              const progress =
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              console.log("Upload is " + progress + "% done");
+              switch (snapshot.state) {
+                case "paused":
+                  console.log("Upload is paused");
+                  break;
+                case "running":
+                  console.log("Upload is running");
+                  break;
+              }
+            },
+            (error) => {
+              // Handle unsuccessful uploads
+              reject(error);
+            },
+            () => {
+              // Handle successful uploads on complete
+              // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+              getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                resolve(downloadURL);
+              });
+            }
+          );
+        });
+      }
     const onClickSubmit = async (e) => {
         e.preventDefault();
         try {
             const auth = getAuth();
+            //const imagesURL =  userDetails.profile && await Promise.all([storeImage(userDetails.profile)])
             const userCredentials = await createUserWithEmailAndPassword(auth, userDetails.email, userDetails.password)
                 .then(async (userCredential) => {
                     // Signed in 
                     const user = userCredential.user;
+                    console.log("sdcsdcsd", user)
                     updateProfile(auth.currentUser, {
                         displayName : userDetails.fname + ' ' + userDetails.lname
+                        //photoURL :  imagesURL[0]
                     })
                     const dataCopy = {...userDetails};
                     delete dataCopy.password;
+                    delete dataCopy.profile;
                     await setDoc(doc(db, "users", user.uid), dataCopy)
                     navigate('/main');
                 })
@@ -36,7 +85,7 @@ function Signup() {
                     
             });
         } catch(err) {
-
+            toast.error(err)
         }
 
    }
@@ -55,7 +104,7 @@ function Signup() {
                         Signup
                     </span>
 
-
+                    {/* <input type="file" onChange={(e) => setUserDetails({...userDetails,'profile': e.target.files[0]})}/> */}
 
                     <div className="wrap-input100 validate-input">                        
                         <input className="input100" type="text" name="Fname"  placeholder="First Name" required 

@@ -38,7 +38,8 @@ export const TextInput = (props) => {
         var data = {
             'from' : auth.currentUser.displayName,
             'to' : props.to,
-            'msg' : msg
+            'msg' : msg,
+            timestamp: serverTimestamp(),
         }
         e.preventDefault();
         const docRef = await addDoc(collection(db, "messages"), data);

@@ -183,12 +183,11 @@ function Accommodation({route, navigation}) {
             <Row sm={12}>
               <div className="shadow p-3  bg-white rounded">
                 <div class="d-flex mt-3 mb-4">
-                  <div className="media me-3 profile-pic">
+                <div className="media me-3 shadow profile-pic">
                     <img
-                      class="mr-3 shadow"
+                      class="mr-3"
                       src="../profile.jpg"
                       alt="Generic placeholder image"
-                      style={{width:'40px !important', height:'40px !important',}}
                     />
                   </div>
                   <div class="media-body w-100">
@@ -248,9 +247,9 @@ function Accommodation({route, navigation}) {
                   {posts.map((post, idx) => (
                     <div className="shadow p-3 mt-2  bg-white rounded">
                       <div class="mt-3 mb-4">
-                        <div className="d-flex align-items-center media me-3 shadow profile-pic">
+                        <div className="d-flex align-items-center media me-3  w-100">
                           <img
-                            class="mr-3"
+                            class="mr-3 profile-pic  shadow"
                             src="../profile.jpg"
                             alt="Generic placeholder image"
                           />

@@ -68,10 +68,6 @@ function Accommodation({route, navigation}) {
           if(messagesSna.size - 1 == msgidx) {setusers(users)}
         });
   };
-
-  useEffect(() => {
-    getPosts();
-  })
   useEffect(() => {
     if(auth.currentUser == null || auth.currentUser == undefined) {navigate("/")}
     else {setFormData((prevState) => ({
@@ -187,11 +183,12 @@ function Accommodation({route, navigation}) {
             <Row sm={12}>
               <div className="shadow p-3  bg-white rounded">
                 <div class="d-flex mt-3 mb-4">
-                  <div className="media me-3 shadow profile-pic">
+                  <div className="media me-3 profile-pic">
                     <img
-                      class="mr-3"
+                      class="mr-3 shadow"
                       src="../profile.jpg"
                       alt="Generic placeholder image"
+                      style={{width:'40px !important', height:'40px !important',}}
                     />
                   </div>
                   <div class="media-body w-100">

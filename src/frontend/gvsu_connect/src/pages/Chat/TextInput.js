@@ -12,7 +12,8 @@ const useStyles = makeStyles((theme: Theme) =>
         display: "flex",
         justifyContent: "center",
         width: "95%",
-        margin: `${theme.spacing(0)} auto`
+        margin: `${theme.spacing(0)} auto`,
+        position: 'relative'
     },
     wrapText  : {
         width: "100%"
@@ -48,7 +49,7 @@ export const TextInput = (props) => {
     }
     return (
         <>
-            <form className={classes.wrapForm}  noValidate autoComplete="off">
+            <form className={classes.wrapForm}  noValidate autoComplete="off" >
             <TextField
                 id="standard-text"
                 label="Type your Message Here"
@@ -56,7 +57,7 @@ export const TextInput = (props) => {
                 onChange = {(e) => setMsg(e.target.value)}
                 value={msg}
             />
-            <i className='icon-send' onClick={(e) => sendMessage(e)}/>  
+            <i className='icon-send' onClick={(e) => sendMessage(e)} style={{position:'absolute', right:20}}/>  
             </form>
         </>
     )
